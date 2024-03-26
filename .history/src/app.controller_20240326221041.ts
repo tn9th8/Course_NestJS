@@ -8,11 +8,6 @@ export class AppController {
   @Get() // route " " => Restful API
   @Render('home')
   handleHomePage() {
-    const message1 = this.appService.getHello();
-
-    return {
-      message: message1,
-    };
     // return 'this.appService.getHello()';
   }
 }
