@@ -14,6 +14,6 @@ async function bootstrap() {
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
 
-  await app.listen(configService.get<string>('PORT'));
+  await app.listen(configService.get('PORT'));
 }
 bootstrap();

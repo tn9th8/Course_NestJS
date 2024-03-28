@@ -13,7 +13,7 @@ export class AppController {
   @Render('home')
   handleHomePage() {
     // port from .env
-    console.log('>> check port = ', this.configService.get<string>('PORT'));
+    console.log('>> check port= ', this.configService.get<string>);
     const message1 = this.appService.getHello();
 
     return {
