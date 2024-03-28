@@ -16,13 +16,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post() // ""
-  create(
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Body('name') name: string,
-  ) {
-    // const email: sting = req.body.email
-    return this.usersService.create(email, password, name);
+  create(@Body('email') myEmail: string) {
+    // @Body() : req.body
+    return 'this.usersService.create(createUserDto)' + myEmail;
   }
 
   @Get()
