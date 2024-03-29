@@ -33,8 +33,6 @@ export class UsersController {
     // const id: sting = req.param.email //
     return this.usersService.findOne(id); // +id: convert string ==> number
   }
-  // Note: với @Get(':a') và @Get('/b'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào
-  // So: cái nào cần (2 @Get có route) sẽ chuyển sang @Post và đưa data vào body
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
