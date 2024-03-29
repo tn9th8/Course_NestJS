@@ -16,9 +16,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post() // ""
-  create(@Body() createUserDto: CreateUserDto) {
-    // biến createUserDto: lấy các trường trong dto và có sức mạnh @Body (dựa vào req.body để lấy giá trị trả về)
-    // @Body('email') email: string // const email: sting = req.body.email // overload với @Body khác
+  create(
+    // @Body('email') email: string,
+    // @Body('password') password: string,
+    // @Body('name') name: string,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    // biến createUserDto có sức mạnh @Body, lấy giá trị  dựa vào req.body
+    // const email: sting = req.body.email
     console.log('>>> check createUserDto', createUserDto);
     return this.usersService.create(createUserDto);
   }
