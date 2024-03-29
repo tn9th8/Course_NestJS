@@ -11,10 +11,9 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view html
-  app.setViewEngine('ejs');
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
-
+  app.setViewEngine('ejs');
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(configService.get<string>('PORT'));
