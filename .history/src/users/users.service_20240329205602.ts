@@ -9,8 +9,8 @@ import { genSaltSync, hashSync } from 'bcryptjs';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) // connect shema of mongo
-    private userModel: Model<User>, // data type
+    @InjectModel(User.name)
+    private userModel: Model<User>,
   ) {}
 
   getHashPassword = (plainPassword: string) => {
