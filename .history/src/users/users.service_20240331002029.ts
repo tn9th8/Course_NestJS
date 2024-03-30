@@ -40,7 +40,9 @@ export class UsersService {
       return 'Not found user';
     }
 
-    return this.userModel.findOne({ _id: id });
+    return this.userModel.findOne({
+      _id: id,
+    });
   }
 
   async update(updateUserDto: UpdateUserDto) {

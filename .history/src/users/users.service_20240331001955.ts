@@ -40,7 +40,9 @@ export class UsersService {
       return 'Not found user';
     }
 
-    return this.userModel.findOne({ _id: id });
+    return this.userModel.findOne({
+      _id: id,
+    });
   }
 
   async update(updateUserDto: UpdateUserDto) {
@@ -51,10 +53,6 @@ export class UsersService {
   }
 
   remove(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
-    }
-
     return this.userModel.deleteOne({ _id: id });
   }
 }
