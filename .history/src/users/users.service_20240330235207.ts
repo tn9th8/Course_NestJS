@@ -45,11 +45,8 @@ export class UsersService {
     });
   }
 
-  async update(updateUserDto: UpdateUserDto) {
-    return await this.userModel.updateOne(
-      { _id: updateUserDto._id },
-      { ...updateUserDto },
-    );
+  update(updateUserDto: UpdateUserDto) {
+    return `This action updates a user`;
   }
 
   remove(id: number) {
