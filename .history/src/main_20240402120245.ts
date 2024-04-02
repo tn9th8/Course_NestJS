@@ -18,7 +18,6 @@ async function bootstrap() {
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
-  // coonfig auto-validation
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(port);
