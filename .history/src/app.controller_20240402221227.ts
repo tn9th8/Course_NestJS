@@ -1,14 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Render,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LocalAuthGuard } from './auth/local-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller() // route "/"
 export class AppController {
@@ -37,9 +30,7 @@ export class AppController {
   }
 
   // Guard
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(AuthGuard('local'))
   @Post('/login')
-  handleLogin(@Request() req) {
-    return req.user;
-  }
+  handleLogin() {}
 }

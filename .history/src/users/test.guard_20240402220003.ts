@@ -6,6 +6,8 @@ export class TestGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    // check login
+
     return false;
   }
 }

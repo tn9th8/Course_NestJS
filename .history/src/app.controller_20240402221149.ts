@@ -1,14 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Render,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LocalAuthGuard } from './auth/local-auth.guard';
 
 @Controller() // route "/"
 export class AppController {
@@ -16,7 +8,7 @@ export class AppController {
     private readonly appService: AppService,
     private configService: ConfigService,
   ) {}
-
+  
   // MVC
   @Get() // route " " => Restful API
   @Render('home')
@@ -37,9 +29,6 @@ export class AppController {
   }
 
   // Guard
-  @UseGuards(LocalAuthGuard)
-  @Post('/login')
-  handleLogin(@Request() req) {
-    return req.user;
-  }
+  @Post(/login)
+  handleLogin() {}
 }
