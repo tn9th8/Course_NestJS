@@ -27,7 +27,8 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  // @UseGuards(JwtAuthGuard) // off code vì đã enable globally
+  // Guard
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
