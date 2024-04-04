@@ -9,14 +9,12 @@ import {
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LocalAuthGuard } from './auth/local-auth.guard';
-import { AuthService } from './auth/auth.service';
 
 @Controller() // route "/"
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private configService: ConfigService,
-    private authService: AuthService,
   ) {}
 
   // MVC
@@ -39,9 +37,9 @@ export class AppController {
   }
 
   // Guard
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @Post('/login')
   handleLogin(@Request() req) {
-    return this.authService.login(req.user);
+    return req.user;
   }
 }

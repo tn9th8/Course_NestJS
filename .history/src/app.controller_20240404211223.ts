@@ -42,6 +42,6 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   handleLogin(@Request() req) {
-    return this.authService.login(req.user);
+    return req.user;
   }
 }
