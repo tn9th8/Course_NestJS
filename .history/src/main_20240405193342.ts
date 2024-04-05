@@ -9,13 +9,12 @@ import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // get port from .env
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
 
   // enable jwt-guard globally
   const reflector = app.get(Reflector);
-  // app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   //config view engine
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image

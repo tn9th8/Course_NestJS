@@ -15,7 +15,7 @@ async function bootstrap() {
 
   // enable jwt-guard globally
   const reflector = app.get(Reflector);
-  // app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   //config view engine
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image
