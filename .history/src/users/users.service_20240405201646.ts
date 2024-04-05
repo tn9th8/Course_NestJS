@@ -64,7 +64,6 @@ export class UsersService {
       return 'Not found user';
     }
 
-    // return this.userModel.deleteOne({ _id: id });
     return this.userModel.softDelete({ _id: id });
   }
 }

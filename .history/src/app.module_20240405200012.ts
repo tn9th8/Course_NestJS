@@ -16,10 +16,6 @@ import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_DB_URL'),
-        connectionFactory: (connection) => {
-          connection.plugin(softDeletePlugin);
-          return connection;
-        },
       }),
       inject: [ConfigService],
     }),

@@ -5,13 +5,12 @@ import mongoose, { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
-import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) // connect shema of mongo
-    private userModel: SoftDeleteModel<UserDocument>, // private userModel: Model<User>, // data type
+    private userModel: SoftDeleteModel<UserDocument>, // data type // private userModel: Model<User>, // data type
   ) {}
 
   getHashPassword = (plainPassword: string) => {
@@ -64,7 +63,6 @@ export class UsersService {
       return 'Not found user';
     }
 
-    // return this.userModel.deleteOne({ _id: id });
-    return this.userModel.softDelete({ _id: id });
+    return this.userModel.deleteOne({ _id: id });
   }
 }
