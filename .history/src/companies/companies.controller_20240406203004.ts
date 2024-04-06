@@ -38,10 +38,9 @@ export class CompaniesController {
   update(
     @Param('id') id: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
-    @User() user: IUser,
+    @User user: IUser,
   ) {
-    return this.companiesService.update(id, updateCompanyDto, user);
-    // +id: convert string ==> number // vì vậy +id không cần thiết, id là đủ
+    return this.companiesService.update(+id, updateCompanyDto);
   }
 
   @Delete(':id')

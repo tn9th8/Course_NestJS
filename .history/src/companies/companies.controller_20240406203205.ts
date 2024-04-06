@@ -41,7 +41,7 @@ export class CompaniesController {
     @User() user: IUser,
   ) {
     return this.companiesService.update(id, updateCompanyDto, user);
-    // +id: convert string ==> number // vì vậy +id không cần thiết, id là đủ
+    // +id: convert string ==> number
   }
 
   @Delete(':id')

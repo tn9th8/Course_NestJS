@@ -15,6 +15,14 @@ export class CompaniesService {
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
+    // let company = await this.companyModel.create({
+    //   email: createCompanyDto.name,
+    //   address: createCompanyDto.address,
+    //   description: createCompanyDto.description,
+    // });
+    // return company;
+
+    // cách khác:
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
     return await this.companyModel.create({
       ...createCompanyDto,

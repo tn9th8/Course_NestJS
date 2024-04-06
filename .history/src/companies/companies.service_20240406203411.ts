@@ -15,8 +15,16 @@ export class CompaniesService {
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
+    // let company = await this.companyModel.create({
+    //   email: createCompanyDto.name,
+    //   address: createCompanyDto.address,
+    //   description: createCompanyDto.description,
+    // });
+    // return company;
+
+    // cách khác:
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
-    return await this.companyModel.create({
+    return this.companyModel.create({
       ...createCompanyDto,
       createdBy: {
         _id: user._id,
@@ -33,17 +41,14 @@ export class CompaniesService {
     return `This action returns a #${id} company`;
   }
 
-  async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
-    return await this.companyModel.updateOne(
-      { _id: id },
-      {
-        ...UpdateCompanyDto,
-        updatedBy: {
-          _id: user._id,
-          email: user.email,
-        },
+  update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
+    return this.companyModel.updateOne({
+      ...UpdateCompanyDto,
+      updatedBy: {
+        _id: user._id,
+        email: user.email,
       },
-    );
+    });
   }
 
   remove(id: number) {

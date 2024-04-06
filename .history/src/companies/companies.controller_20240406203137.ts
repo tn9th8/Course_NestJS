@@ -40,8 +40,7 @@ export class CompaniesController {
     @Body() updateCompanyDto: UpdateCompanyDto,
     @User() user: IUser,
   ) {
-    return this.companiesService.update(id, updateCompanyDto, user);
-    // +id: convert string ==> number // vì vậy +id không cần thiết, id là đủ
+    return this.companiesService.update(+id, updateCompanyDto); // +id: convert string ==> number
   }
 
   @Delete(':id')
