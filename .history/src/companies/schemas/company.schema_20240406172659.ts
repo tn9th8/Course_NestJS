@@ -9,7 +9,7 @@ export class Company {
   name: string;
 
   @Prop()
-  address: string;
+  address: string; // unique
 
   @Prop()
   description: string;

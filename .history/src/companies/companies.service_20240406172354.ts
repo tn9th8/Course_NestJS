@@ -10,7 +10,8 @@ import { Model } from 'mongoose';
 export class CompaniesService {
   constructor(
     @InjectModel(Company.name) // connect shema of mongo
-    private companyModel: SoftDeleteModel<CompanyDocument>, //private userModel: Model<Company>,
+    private companyModel: SoftDeleteModel<CompanyDocument>,
+    private userModel: Model<Company>,
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto) {

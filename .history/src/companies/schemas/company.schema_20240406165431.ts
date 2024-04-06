@@ -9,10 +9,13 @@ export class Company {
   name: string;
 
   @Prop()
-  address: string;
+  address: string; // unique
 
   @Prop()
-  description: string;
+  password: string;
+
+  @Prop()
+  description: number;
 
   @Prop({ type: Object })
   createdBy: {
