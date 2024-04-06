@@ -68,18 +68,18 @@ export class UsersService {
     return this.userModel.softDelete({ _id: id });
   }
 
-  // async register(user: RegisterUserDto) {
-  //   const { name, email, password, age, gender, address } = user;
-  //   const hashPassword = this.getHashPassword(password);
-  //   let newRegister = await this.userModel.create({
-  //     name,
-  //     email,
-  //     password: hashPassword,
-  //     age,
-  //     gender,
-  //     address,
-  //     role: 'USER',
-  //   });
-  //   return newRegister;
-  // }
+  async register(user: RegisterUserDto) {
+    const { name, email, password, age, gender, address } = user;
+    const hashPassword = this.getHashPassword(password);
+    let newRegister = await this.userModel.create({
+      name,
+      email,
+      password: hashPassword,
+      age,
+      gender,
+      address,
+      role: 'USER',
+    });
+    return newRegister;
+  }
 }

@@ -33,15 +33,14 @@ export class AuthService {
     };
   }
 
-  // async register(user: RegisterUserDto) {
-  //   // chỉ hứng kết quả thôi
-  //   // còn lại nén cho UserService vì nó có thể chọc đến database và hash password ...
-  //   let newUser = await this.usersService.register(user);
+  async register(user: RegisterUserDto) {
+    // chỉ hứng kết quả thôi
+    // còn lại nén cho UserService vì nó có thể chọc đến database và hash password ...
+    let newUser = await this.usersService.register(user);
 
-  //   return {
-  //     // have to use ? to avoid the case that newUser = null;
-  //     _id: newUser?._id,
-  //     createdAt: newUser?.createdAt,
-  //   };
-  // }
+    return {
+      _id: newUser?._id,
+      createdAt: newUser?.createdAt,
+    };
+  }
 }

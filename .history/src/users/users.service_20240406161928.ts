@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import mongoose, { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
@@ -68,18 +68,5 @@ export class UsersService {
     return this.userModel.softDelete({ _id: id });
   }
 
-  // async register(user: RegisterUserDto) {
-  //   const { name, email, password, age, gender, address } = user;
-  //   const hashPassword = this.getHashPassword(password);
-  //   let newRegister = await this.userModel.create({
-  //     name,
-  //     email,
-  //     password: hashPassword,
-  //     age,
-  //     gender,
-  //     address,
-  //     role: 'USER',
-  //   });
-  //   return newRegister;
-  // }
+  register(user: User) {}
 }

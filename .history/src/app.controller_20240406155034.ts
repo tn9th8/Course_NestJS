@@ -35,22 +35,22 @@ export class AppController {
     return req.user;
   }
 
-  // // MVC
-  // @Get() // route " " => Restful API
-  // @Render('home')
-  // handleHomePage() {
-  //   // port from .env
-  //   console.log('>> check port = ', this.configService.get<string>('PORT'));
-  //   const message1 = this.appService.getHello();
+  // MVC
+  @Get() // route " " => Restful API
+  @Render('home')
+  handleHomePage() {
+    // port from .env
+    console.log('>> check port = ', this.configService.get<string>('PORT'));
+    const message1 = this.appService.getHello();
 
-  //   return {
-  //     message: message1,
-  //   };
-  //   // return 'this.appService.getHello()';
-  // }
+    return {
+      message: message1,
+    };
+    // return 'this.appService.getHello()';
+  }
 
-  // @Get('abc') /// route " "  /
-  // getHello1(): string {
-  //   return 'this.appService.getHello() abc';
-  // }
+  @Get('abc') /// route " "  /
+  getHello1(): string {
+    return 'this.appService.getHello() abc';
+  }
 }
