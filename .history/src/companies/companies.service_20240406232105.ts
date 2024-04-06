@@ -28,14 +28,10 @@ export class CompaniesService {
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
+    const { filter, sort, projection, population } = aqp(qs);
     delete filter.page;
     delete filter.limit;
     // return { filter }; // check filter thấy dự page và limit nên phải xóa
-    // { projection, population } để join bảng
-    // regular expression:
-    // - filter của thư viện sẽ biểu = thành eq của mongoDB
-    // - LIKE operator on mongoose: /pattern/i
 
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
@@ -85,7 +81,7 @@ export class CompaniesService {
     return await this.companyModel.updateOne(
       { _id: id },
       {
-        ...updateCompanyDto,
+        ...UpdateCompanyDto,
         updatedBy: {
           _id: user._id,
           email: user.email,

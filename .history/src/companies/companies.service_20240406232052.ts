@@ -28,14 +28,10 @@ export class CompaniesService {
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
+    const { filter, sort, projection, population } = aqp(qs);
     delete filter.page;
     delete filter.limit;
     // return { filter }; // check filter thấy dự page và limit nên phải xóa
-    // { projection, population } để join bảng
-    // regular expression:
-    // - filter của thư viện sẽ biểu = thành eq của mongoDB
-    // - LIKE operator on mongoose: /pattern/i
 
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
@@ -45,6 +41,13 @@ export class CompaniesService {
     // chia và làm tròn ra tổng số trang
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
+    const result = await this.companyModel
+      .find(filter)
+      .skip(offset)
+      .limit(defaultLimit)
+      .sort(sort as any)
+      .populate(population)
+      .exec();
     // sort(sort) có bug
     // vì 2 package mongoose và api-query-param bị bênh / lỗi
     // vì TS và JS bị mẫu thuẫn type do TS check type
@@ -58,13 +61,6 @@ export class CompaniesService {
     // Cách 3 fix: dùng any => convert types of destructuring object in TS
     // let {sort}: {sort: any} = aqp(sq) // khai báo biến và ép kiểu bên cạch
     // let { sort }= <{sort: any}>aqp(rq);
-    const result = await this.companyModel
-      .find(filter)
-      .skip(offset)
-      .limit(defaultLimit)
-      .sort(sort as any)
-      .populate(population)
-      .exec();
 
     return {
       meta: {
@@ -85,7 +81,7 @@ export class CompaniesService {
     return await this.companyModel.updateOne(
       { _id: id },
       {
-        ...updateCompanyDto,
+        ...UpdateCompanyDto,
         updatedBy: {
           _id: user._id,
           email: user.email,
