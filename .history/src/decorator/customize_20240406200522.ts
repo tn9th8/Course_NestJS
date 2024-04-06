@@ -13,9 +13,9 @@ export const User = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     return request.user;
-    // ý nghĩa:
+    // ý nghĩa bằng với:
     // import {Request} from Express;
     // @Req req: Request;
-    // coust user = req.user; ==> cách cũ này không tường minh và mất 2 lần code
+    // coust user = req.user; ==> cách này không tường minh và mất 2 lần code
   },
 );

@@ -19,9 +19,7 @@ export class CompaniesController {
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto, @User() user: IUser) {
-    // @User user chính là req.user
-    // console.log('>>> user infor in request: ', user);
-    return this.companiesService.create(createCompanyDto, user);
+    return this.companiesService.create(createCompanyDto);
   }
 
   @Get()

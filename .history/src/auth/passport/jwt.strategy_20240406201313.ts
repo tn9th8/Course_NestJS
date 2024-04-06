@@ -9,7 +9,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   // Strategy là thư viện xử lý token như encode, decode
 
   constructor(private configService: ConfigService) {
-    // lấy jwt trong request header và decode
+    // lấy jwt trong request và decode
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -25,6 +25,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       name,
       email,
       role,
-    }; // return là gán biến {...} vào req.user
+    }; // req.user
   }
 }

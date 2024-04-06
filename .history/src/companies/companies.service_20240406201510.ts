@@ -5,7 +5,6 @@ import { Company, CompanyDocument } from './schemas/company.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Model } from 'mongoose';
-import { IUser } from 'src/users/users.interface';
 
 @Injectable()
 export class CompaniesService {
@@ -14,7 +13,7 @@ export class CompaniesService {
     private companyModel: SoftDeleteModel<CompanyDocument>, //private userModel: Model<Company>,
   ) {}
 
-  async create(createCompanyDto: CreateCompanyDto, user: IUser) {
+  async create(createCompanyDto: CreateCompanyDto) {
     // let company = await this.companyModel.create({
     //   email: createCompanyDto.name,
     //   address: createCompanyDto.address,
@@ -23,14 +22,8 @@ export class CompaniesService {
     // return company;
 
     // cách khác:
-    // ... mean is that copying all data of createCompanyDto to insert 1 document at database
-    return this.companyModel.create({
-      ...createCompanyDto,
-      createdBy: {
-        _id: user._id,
-        email: user.email,
-      },
-    });
+    // ... mean is that copying all data of createCompanyDto to create at database
+    return this.companyModel.create({ ...createCompanyDto });
   }
 
   findAll() {

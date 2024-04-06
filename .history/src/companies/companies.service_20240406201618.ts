@@ -24,13 +24,7 @@ export class CompaniesService {
 
     // cách khác:
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
-    return this.companyModel.create({
-      ...createCompanyDto,
-      createdBy: {
-        _id: user._id,
-        email: user.email,
-      },
-    });
+    return this.companyModel.create({ ...createCompanyDto });
   }
 
   findAll() {
