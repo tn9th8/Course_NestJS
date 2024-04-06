@@ -5,7 +5,6 @@ import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
-import { TransformInterceptor } from './core/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -25,11 +24,10 @@ async function bootstrap() {
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
-  // config middleware
-  // - auto-validation-pipe
+  // config middlewate
+  // auto-validation
   app.useGlobalPipes(new ValidationPipe());
-  // - transform-interceptor
-  app.useGlobalInterceptors(new TransformInterceptor());
+  //
 
   // config CORS
   app.enableCors({
