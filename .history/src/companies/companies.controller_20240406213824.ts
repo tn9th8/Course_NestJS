@@ -26,18 +26,8 @@ export class CompaniesController {
   }
 
   @Get()
-  findAll(
-    @Query('page') currentPage: string,
-    @Query('limit') limit: string,
-    @Query() qs: string,
-  ) {
-    // const currentPage: string = req.query.page;
-    // Expressjs code thuần, Nestjs hỗ trợ bằng decorator
-    // qs: query string
-    // @Query qs / req.query: convert "raw query" ==> object
-
-    return this.companiesService.findAll(+currentPage, +limit, qs);
-    // +currentPage: convert string ==> number
+  findAll(@Query("page")) {
+    return this.companiesService.findAll();
   }
 
   @Get(':id')
@@ -52,6 +42,7 @@ export class CompaniesController {
     @User() user: IUser,
   ) {
     return this.companiesService.update(id, updateCompanyDto, user);
+    // +id: convert string ==> number // vì vậy +id không cần thiết, id là đủ
   }
 
   @Delete(':id')

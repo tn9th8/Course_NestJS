@@ -50,16 +50,6 @@ export class CompaniesService {
       .sort(sort)
       .populate(population)
       .exec();
-
-    return {
-      meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems, // tổng số phần tử (số bản ghi)
-      },
-      result, //kết quả query
-    };
   }
 
   findOne(id: number) {

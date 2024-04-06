@@ -41,25 +41,18 @@ export class CompaniesService {
     // chia và làm tròn ra tổng số trang
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const result = await this.companyModel
+    if (isEmpty(sort)) {
+      // @ts-ignore: Unreachable code error
+      sort = '-updatedAt';
+    }
+    const result = await this.model
       .find(filter)
       .skip(offset)
       .limit(defaultLimit)
       // @ts-ignore: Unreachable code error
-      // để bỏ TS check type cho đoạn code bên dưới
       .sort(sort)
       .populate(population)
       .exec();
-
-    return {
-      meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems, // tổng số phần tử (số bản ghi)
-      },
-      result, //kết quả query
-    };
   }
 
   findOne(id: number) {
