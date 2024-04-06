@@ -20,8 +20,6 @@ export class CompaniesService {
     //   description: createCompanyDto.description,
     // });
     // return company;
-
-    // ... mean is that copying all data of createCompanyDto to create at database
     return this.companyModel.create({ ...createCompanyDto });
   }
 
