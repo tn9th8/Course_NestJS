@@ -8,7 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { Reflector } from '@nestjs/core';
 import ms from 'ms'; // hàm
-import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -29,7 +28,7 @@ import { AuthController } from './auth.controller';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController]
   providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
   exports: [AuthService],
 })
