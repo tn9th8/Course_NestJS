@@ -45,7 +45,7 @@ export class CompaniesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @User() user: IUser) {
-    return this.companiesService.remove(id, user);
+  remove(@Param('id') id: string) {
+    return this.companiesService.remove(id);
   }
 }

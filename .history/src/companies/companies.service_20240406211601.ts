@@ -50,7 +50,7 @@ export class CompaniesService {
   async remove(id: string, @User() user: IUser) {
     // Cách 1 validate:
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
+      return Error('Element not found');
     }
 
     // // Cách 2 validate:

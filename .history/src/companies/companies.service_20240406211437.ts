@@ -48,10 +48,10 @@ export class CompaniesService {
   }
 
   async remove(id: string, @User() user: IUser) {
-    // Cách 1 validate:
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
-    }
+    // // Cách 1 validate:
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   return 'Not found user';
+    // }
 
     // // Cách 2 validate:
     // // hàm này đã nằm trong softDelete

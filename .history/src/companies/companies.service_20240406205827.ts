@@ -47,47 +47,20 @@ export class CompaniesService {
     );
   }
 
-  async remove(id: string, @User() user: IUser) {
-    // Cách 1 validate:
+  remove(id: string, @User() user: IUser) {
+    // return `This action removes a #${id} company`;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'Not found user';
     }
 
-    // // Cách 2 validate:
-    // // hàm này đã nằm trong softDelete
-    // // hàm find thuộc soft-delete-plugin
-    // const templates = await this.find({ _id: id });
-    // if (!templates) {
-    //   return Error('Element not found');
-    // }
-
-    // Cách 1 delete:
-    // hàm softDelete có hạn chế không hỗ trợ lưu trường detetedBy
-    // nên dùng hàm updateOne ở trên để hổ trợ
-    await this.companyModel.updateOne(
+    return this.companyModel.softDelete(
       { _id: id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: user._id,
           email: user.email,
         },
       },
     );
-    return this.companyModel.softDelete({ _id: id });
-
-    // // Cách 2 delete:
-    // // +: dùng 1 câu query
-    // // -: frontend khó xử lý
-    // await this.companyModel.updateOne(
-    //   { _id: id },
-    //   {
-    //     detetedBy: {
-    //       _id: user._id,
-    //       email: user.email,
-    //     },
-    //     isDeleted: true,
-    //     deletedAt: new Date(),
-    //   },
-    // );
   }
 }

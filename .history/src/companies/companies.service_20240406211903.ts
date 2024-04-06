@@ -75,19 +75,21 @@ export class CompaniesService {
     );
     return this.companyModel.softDelete({ _id: id });
 
-    // // Cách 2 delete:
-    // // +: dùng 1 câu query
-    // // -: frontend khó xử lý
-    // await this.companyModel.updateOne(
-    //   { _id: id },
-    //   {
-    //     detetedBy: {
-    //       _id: user._id,
-    //       email: user.email,
-    //     },
-    //     isDeleted: true,
-    //     deletedAt: new Date(),
-    //   },
-    // );
+    // Cách 2 delete:
+    // +: dùng 1 câu query
+    // -: frontend khó xử lý
+    let deleted = 0;
+    await this.companyModel.updateOne(
+      { _id: id },
+      {
+        detetedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+        isDeleted: true,
+        deletedAt: new Date(),
+      },
+    );
+    return {deleted++};
   }
 }
