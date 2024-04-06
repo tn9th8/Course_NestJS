@@ -6,11 +6,14 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { Public } from 'src/decorator/customize';
-import { LocalAuthGuard } from './passport/local-auth.guard';
+import { AppService } from './app.service';
+import { ConfigService } from '@nestjs/config';
+import { LocalAuthGuard } from './auth/passport/local-auth.guard';
+import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
+import { AuthService } from './auth/auth.service';
+import { Public } from './decorator/customize';
 
-@Controller('auth') // route "/"
+@Controller() // route "/"
 export class AuthController {
   constructor(private authService: AuthService) {}
 

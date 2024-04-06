@@ -26,21 +26,12 @@ export class AuthService {
 
   // dùng user: any từng là TS ko biết user là cái gì, ko biết type của biến này
   async login(user: IUser) {
-    const { _id, name, email, role } = user;
     const payload = {
-      sub: 'token login',
-      iss: 'from server',
-      _id,
-      name,
-      email,
-      role,
+      username: user.email,
+      sub: user._id,
     };
     return {
       access_token: this.jwtService.sign(payload),
-      _id,
-      name,
-      email,
-      role,
     };
   }
 

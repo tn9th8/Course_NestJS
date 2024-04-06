@@ -21,6 +21,20 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
+  // // Guard
+  // @Public()
+  // @UseGuards(LocalAuthGuard)
+  // @Post('/login')
+  // handleLogin(@Request() req) {
+  //   return this.authService.login(req.user);
+  // }
+
+  // // @UseGuards(JwtAuthGuard) // off code vì đã enable globally
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
+
   // // MVC
   // @Get() // route " " => Restful API
   // @Render('home')
