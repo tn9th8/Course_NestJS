@@ -9,7 +9,7 @@ export class User {
   name: string;
 
   @Prop({ required: true })
-  email: string; // unique
+  email: string;
 
   @Prop({ required: true })
   password: string;
@@ -46,15 +46,6 @@ export class User {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
   };
-
-  @Prop({ type: Object })
-  deletedBy: {
-    _id: mongoose.Schema.Types.ObjectId;
-    email: string;
-  };
-
-  @Prop()
-  createdAt: Date;
 
   @Prop()
   updatedAt: Date;

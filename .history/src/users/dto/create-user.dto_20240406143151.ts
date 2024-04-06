@@ -1,22 +1,5 @@
-import { Type } from 'class-transformer';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
-import mongoose from 'mongoose';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class Company {
-  @IsNotEmpty()
-  _id: mongoose.Schema.Types.ObjectId;
-
-  @IsNotEmpty()
-  name: string;
-}
-
-// Data transfer object // class = {}
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Name không được để trống' })
   name: string;
@@ -36,15 +19,6 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: 'Address không được để trống' })
   address: string;
-
-  @IsNotEmpty({ message: 'Role không được để trống' })
-  role: string;
-
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => Company)
-  company: Company;
 }
 
 export class RegisterUserDto {
@@ -66,4 +40,7 @@ export class RegisterUserDto {
 
   @IsNotEmpty({ message: 'Address không được để trống' })
   address: string;
+
+  @IsNotEmpty({ message: 'Role không được để trống' })
+  role: string;
 }

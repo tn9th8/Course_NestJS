@@ -9,10 +9,10 @@ import {
 import mongoose from 'mongoose';
 
 export class Company {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Company ID không được để trống' })
   _id: mongoose.Schema.Types.ObjectId;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Company Name không được để trống' })
   name: string;
 }
 

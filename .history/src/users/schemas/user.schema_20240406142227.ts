@@ -9,7 +9,7 @@ export class User {
   name: string;
 
   @Prop({ required: true })
-  email: string; // unique
+  email: string;
 
   @Prop({ required: true })
   password: string;
@@ -54,16 +54,13 @@ export class User {
   };
 
   @Prop()
-  createdAt: Date;
-
-  @Prop()
   updatedAt: Date;
 
   @Prop()
-  isDelete: boolean;
+  deletedAt: Date;
 
   @Prop()
-  deletedAt: Date;
+  isDelete: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

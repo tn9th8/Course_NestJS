@@ -9,14 +9,13 @@ import {
 import mongoose from 'mongoose';
 
 export class Company {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'ID không được để trống' })
   _id: mongoose.Schema.Types.ObjectId;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Name không được để trống' })
   name: string;
 }
 
-// Data transfer object // class = {}
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Name không được để trống' })
   name: string;
