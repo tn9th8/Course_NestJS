@@ -17,7 +17,7 @@ async function bootstrap() {
   // config middleware
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector)); // enable jwt-guard globally
-  app.useGlobalInterceptors(new TransformInterceptor(reflector)); // transform-interceptor
+  app.useGlobalInterceptors(new TransformInterceptor(reflector)); // - transform-interceptor
 
   //config view engine
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image
@@ -26,7 +26,8 @@ async function bootstrap() {
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
-  // config middleware: auto-validation-pipe
+  // config middleware
+  // - auto-validation-pipe
   app.useGlobalPipes(new ValidationPipe());
 
   // config CORS

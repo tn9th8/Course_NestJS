@@ -7,7 +7,6 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RESPONSE_MESSAGE_KEY } from 'src/decorator/customize';
 
 export interface Response<T> {
   statusCode: number;
@@ -38,7 +37,7 @@ export class TransformInterceptor<T>
             statusCode: context.switchToHttp().getResponse().statusCode,
             message:
               this.reflector.get<string>(
-                RESPONSE_MESSAGE_KEY, // lấy ra bằng key
+                'response_message',
                 context.getHandler(),
               ) || '',
             data: data,
