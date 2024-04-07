@@ -131,7 +131,7 @@ export class UsersService {
       return 'Not found user';
     }
 
-    // updateOne( detetedBy ) + softDelete
+    // softDelete + updateOne( detetedBy )
     await this.userModel.updateOne(
       { _id: id },
       {

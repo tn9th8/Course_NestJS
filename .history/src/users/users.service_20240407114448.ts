@@ -126,21 +126,61 @@ export class UsersService {
   }
 
   async remove(id: string, @UserReq() userReq: IUser) {
-    // validate:
+    // Cách 1 validate:
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'Not found user';
     }
 
-    // updateOne( detetedBy ) + softDelete
-    await this.userModel.updateOne(
+    // // Cách 2 validate:
+    // // hàm này đã nằm trong softDelete
+    // // hàm find thuộc soft-delete-plugin
+    // const templates = await this.find({ _id: id });
+    // if (!templates) {
+    //   return Error('Element not found');
+    // }
+
+    // Cách 1 delete:
+    // hàm softDelete có hạn chế không hỗ trợ lưu trường detetedBy
+    // nên dùng hàm updateOne ở trên để hổ trợ
+    await this.companyModel.updateOne(
       { _id: id },
       {
         detetedBy: {
-          _id: userReq._id,
-          email: userReq.email,
+          _id: user._id,
+          email: user.email,
         },
       },
     );
-    return this.userModel.softDelete({ _id: id });
+    return this.companyModel.softDelete({ _id: id });
+
+    // // Cách 2 delete:
+    // // +: dùng 1 câu query
+    // // -: frontend khó xử lý
+    // await this.companyModel.updateOne(
+    //   { _id: id },
+    //   {
+    //     detetedBy: {
+    //       _id: user._id,
+    //       email: user.email,
+    //     },
+    //     isDeleted: true,
+    //     deletedAt: new Date(),
+    //   },
+    // );
   }
+
+  // async register(user: RegisterUserDto) {
+  //   const { name, email, password, age, gender, address } = user;
+  //   const hashPassword = this.getHashPassword(password);
+  //   let newRegister = await this.userModel.create({
+  //     name,
+  //     email,
+  //     password: hashPassword,
+  //     age,
+  //     gender,
+  //     address,
+  //     role: 'USER',
+  //   });
+  //   return newRegister;
+  // }
 }

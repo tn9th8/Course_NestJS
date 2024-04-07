@@ -126,12 +126,14 @@ export class UsersService {
   }
 
   async remove(id: string, @UserReq() userReq: IUser) {
-    // validate:
+    // Cách 1 validate:
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'Not found user';
     }
 
-    // updateOne( detetedBy ) + softDelete
+    // Cách 1 delete:
+    // hàm softDelete có hạn chế không hỗ trợ lưu trường detetedBy
+    // nên dùng hàm updateOne ở trên để hổ trợ
     await this.userModel.updateOne(
       { _id: id },
       {
