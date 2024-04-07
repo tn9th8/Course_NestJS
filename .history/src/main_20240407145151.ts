@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
-import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,14 +24,9 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view html
   app.setViewEngine('ejs');
-  console.log('>> check path public: ', join(__dirname, '..', 'public'));
-  console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
   // config middleware: auto-validation-pipe
   app.useGlobalPipes(new ValidationPipe());
-
-  // config cookies: server can read and set cookies at client
-  app.use(cookieParser());
 
   // config CORS: để cho client-port-3000 có thể truy cập server
   app.enableCors({
@@ -45,8 +40,11 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI, // v // vì dùng URI
     defaultVersion: ['1', '2'], // v1, v1
+    // prefix: 'api/v', // api/v // nhưng thiết professional
   });
 
+  // console.log('>> check path public: ', join(__dirname, '..', 'public'));
+  // console.log('>> check path views: ', join(__dirname, '..', 'views'));
   await app.listen(port);
 }
 bootstrap();

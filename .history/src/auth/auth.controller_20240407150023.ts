@@ -25,8 +25,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   @ResponseMessage('User login')
-  handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
-    return this.authService.login(req.user, response);
+  handleLogin(
+    @Req() req: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    response.cookie('key', 'value');
+    return this.authService.login(req.user);
   }
 
   @Public()
@@ -39,7 +43,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  getProfile(@Req() req) {
-    return req.user; // @Request
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

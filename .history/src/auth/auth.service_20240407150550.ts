@@ -44,11 +44,8 @@ export class AuthService {
     // update user with refresh token
     await this.usersService.updateUserToken(refresh_token, _id);
 
-    // set refresh_token as cookies at client
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
-    });
+    // set refresh_token as cookies
+    response.cookie('key1', 'hoidanit');
 
     // response
     return {

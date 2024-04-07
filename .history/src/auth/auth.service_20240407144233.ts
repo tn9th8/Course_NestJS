@@ -5,7 +5,6 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { IUser } from 'src/users/users.interface';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms'; // hàm
-import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +28,7 @@ export class AuthService {
   }
 
   // dùng user: any từng là TS ko biết user là cái gì, ko biết type của biến này
-  async login(user: IUser, response: Response) {
+  async login(user: IUser) {
     const { _id, name, email, role } = user;
     const payload = {
       sub: 'token login',
@@ -44,15 +43,9 @@ export class AuthService {
     // update user with refresh token
     await this.usersService.updateUserToken(refresh_token, _id);
 
-    // set refresh_token as cookies at client
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
-    });
-
-    // response
     return {
       access_token: this.jwtService.sign(payload),
+      refresh_token,
       user: {
         _id,
         name,

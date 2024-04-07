@@ -24,15 +24,12 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, image
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view html
   app.setViewEngine('ejs');
-  console.log('>> check path public: ', join(__dirname, '..', 'public'));
-  console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
   // config middleware: auto-validation-pipe
   app.useGlobalPipes(new ValidationPipe());
 
-  // config cookies: server can read and set cookies at client
+  // config cookies:
   app.use(cookieParser());
-
   // config CORS: để cho client-port-3000 có thể truy cập server
   app.enableCors({
     origin: 'http://localhost:3000',
@@ -47,6 +44,8 @@ async function bootstrap() {
     defaultVersion: ['1', '2'], // v1, v1
   });
 
+  // console.log('>> check path public: ', join(__dirname, '..', 'public'));
+  // console.log('>> check path views: ', join(__dirname, '..', 'views'));
   await app.listen(port);
 }
 bootstrap();

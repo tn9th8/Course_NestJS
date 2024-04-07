@@ -26,6 +26,7 @@ export class AuthController {
   @Post('/login')
   @ResponseMessage('User login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
+    // res.cookie('key', 'value');
     return this.authService.login(req.user, response);
   }
 
@@ -40,6 +41,7 @@ export class AuthController {
 
   @Get('profile')
   getProfile(@Req() req) {
-    return req.user; // @Request
+    // @Request
+    return req.user;
   }
 }

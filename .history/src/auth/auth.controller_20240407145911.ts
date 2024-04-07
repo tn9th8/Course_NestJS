@@ -4,7 +4,7 @@ import {
   Get,
   Post,
   Render,
-  Req,
+  Request,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -13,7 +13,7 @@ import { Public, ResponseMessage } from 'src/decorator/customize';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
-import { Request, Response } from 'express';
+import { Request } from 'supertest';
 
 @Controller('auth') // route "/"
 export class AuthController {
@@ -25,8 +25,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   @ResponseMessage('User login')
-  handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
-    return this.authService.login(req.user, response);
+  handleLogin(
+    @Request() req: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    response.cookie('key', 'value');
+    return this.authService.login(req.user);
   }
 
   @Public()
@@ -39,7 +43,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  getProfile(@Req() req) {
-    return req.user; // @Request
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

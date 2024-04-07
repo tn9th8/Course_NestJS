@@ -47,7 +47,7 @@ export class AuthService {
     // set refresh_token as cookies at client
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
+      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')) / 1000, //milisecond
     });
 
     // response

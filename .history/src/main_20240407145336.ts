@@ -30,7 +30,7 @@ async function bootstrap() {
   // config middleware: auto-validation-pipe
   app.useGlobalPipes(new ValidationPipe());
 
-  // config cookies: server can read and set cookies at client
+  // config cookies
   app.use(cookieParser());
 
   // config CORS: để cho client-port-3000 có thể truy cập server
