@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
@@ -79,9 +79,7 @@ export class AuthService {
       });
       console.log(a);
     } catch (error) {
-      throw new BadRequestException(
-        `Refresh token không hợp lệ. Vui lòng login`,
-      );
+      console.log('>>> check error', error);
     }
     // verify: xác thực và decode token luôn
   }

@@ -50,6 +50,6 @@ export class AuthController {
   @ResponseMessage('Get user by refresh token')
   handleRefreshToken(@Req() request: Request) {
     const refreshToken = request.cookies['refresh_token'];
-    return this.authService.processNewToken(refreshToken);
+    return { refreshToken }; // JS: req.user
   }
 }

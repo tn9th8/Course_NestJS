@@ -80,7 +80,7 @@ export class AuthService {
       console.log(a);
     } catch (error) {
       throw new BadRequestException(
-        `Refresh token không hợp lệ. Vui lòng login`,
+        `Refresh token không hợp lệ. Vui lòng Login`,
       );
     }
     // verify: xác thực và decode token luôn
