@@ -65,34 +65,20 @@ export class JobsService {
     return await this.jobModel.findOne({ _id: id });
   }
 
-  async update(id: string, updateJobDto: UpdateJobDto, userReq: IUser) {
+  async update(id: number, updateJobDto: UpdateJobDto, user: IUser) {
     return await this.jobModel.updateOne(
       { _id: id },
       {
         ...updateJobDto,
         updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
+          _id: user._id,
+          email: user.email,
         },
       },
     );
   }
 
-  async remove(_id: string, userReq: IUser) {
-    // Cách 1 validate:
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return 'Not found user';
-    }
-
-    await this.jobModel.updateOne(
-      { _id },
-      {
-        detetedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
-    return this.jobModel.softDelete({ _id });
+  remove(id: number) {
+    return `This action removes a #${id} job`;
   }
 }

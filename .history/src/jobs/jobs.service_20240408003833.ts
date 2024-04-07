@@ -62,37 +62,18 @@ export class JobsService {
       return 'Not found user';
     }
 
-    return await this.jobModel.findOne({ _id: id });
+    return await this.jobModel
+      .findOne({
+        _id: id,
+      })
+      .select('-password');
   }
 
-  async update(id: string, updateJobDto: UpdateJobDto, userReq: IUser) {
-    return await this.jobModel.updateOne(
-      { _id: id },
-      {
-        ...updateJobDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
+  update(id: number, updateJobDto: UpdateJobDto) {
+    return `This action updates a #${id} job`;
   }
 
-  async remove(_id: string, userReq: IUser) {
-    // Cách 1 validate:
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return 'Not found user';
-    }
-
-    await this.jobModel.updateOne(
-      { _id },
-      {
-        detetedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
-    return this.jobModel.softDelete({ _id });
+  remove(id: number) {
+    return `This action removes a #${id} job`;
   }
 }

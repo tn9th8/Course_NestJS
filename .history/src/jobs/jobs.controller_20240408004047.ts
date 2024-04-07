@@ -41,7 +41,6 @@ export class JobsController {
   }
 
   @Patch(':id')
-  @ResponseMessage('Update a job by id')
   update(
     @Param('id') id: string,
     @Body() updateJobDto: UpdateJobDto,
@@ -51,8 +50,7 @@ export class JobsController {
   }
 
   @Delete(':id')
-  @ResponseMessage('Delete a job by id')
-  remove(@Param('id') id: string, @User() userReq: IUser) {
-    return this.jobsService.remove(id, userReq);
+  remove(@Param('id') id: string) {
+    return this.jobsService.remove(+id);
   }
 }

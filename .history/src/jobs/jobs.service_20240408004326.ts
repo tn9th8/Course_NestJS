@@ -78,21 +78,7 @@ export class JobsService {
     );
   }
 
-  async remove(_id: string, userReq: IUser) {
-    // Cách 1 validate:
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return 'Not found user';
-    }
-
-    await this.jobModel.updateOne(
-      { _id },
-      {
-        detetedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
-    return this.jobModel.softDelete({ _id });
+  remove(id: number) {
+    return `This action removes a #${id} job`;
   }
 }

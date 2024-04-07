@@ -1,8 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
-  IsBoolean,
-  IsDate,
   IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -54,17 +52,8 @@ export class CreateJobDto {
 
   @IsNotEmpty({ message: 'Started Date không được để trống' })
   @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'endDate có định dạng là Date' })
   startDate: Date;
 
   @IsNotEmpty({ message: 'Ended Date không được để trống' })
-  @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'endDate có định dạng là Date' })
   endDate: Date;
-
-  @IsNotEmpty({ message: 'isActive không được để trống' })
-  @IsBoolean({ message: 'isActive có định dạng là boolean' })
-  isActive: boolean;
-
-  // check endDate sau startDate ở đây hoặc trong service
 }

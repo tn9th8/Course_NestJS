@@ -80,12 +80,12 @@ export class JobsService {
 
   async remove(_id: string, userReq: IUser) {
     // Cách 1 validate:
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'Not found user';
     }
 
     await this.jobModel.updateOne(
-      { _id },
+      { _id: id },
       {
         detetedBy: {
           _id: userReq._id,

@@ -1,7 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
-  IsBoolean,
   IsDate,
   IsEmail,
   IsNotEmpty,
@@ -62,7 +61,8 @@ export class CreateJobDto {
   @IsDate({ message: 'endDate có định dạng là Date' })
   endDate: Date;
 
-  @IsNotEmpty({ message: 'isActive không được để trống' })
+  @IsNotEmpty({ message: 'Ended Date không được để trống' })
+  @Transform(({ value }) => new Date(value))
   @IsBoolean({ message: 'isActive có định dạng là boolean' })
   isActive: boolean;
 

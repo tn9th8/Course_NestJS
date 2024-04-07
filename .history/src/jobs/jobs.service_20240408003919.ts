@@ -57,42 +57,19 @@ export class JobsService {
     };
   }
 
-  async findOne(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
-    }
-
-    return await this.jobModel.findOne({ _id: id });
-  }
-
-  async update(id: string, updateJobDto: UpdateJobDto, userReq: IUser) {
-    return await this.jobModel.updateOne(
-      { _id: id },
-      {
-        ...updateJobDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
-  }
-
-  async remove(_id: string, userReq: IUser) {
-    // Cách 1 validate:
+  async findOne(_id: string) {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return 'Not found user';
     }
 
-    await this.jobModel.updateOne(
-      { _id },
-      {
-        detetedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
-    );
-    return this.jobModel.softDelete({ _id });
+    return await this.jobModel.findOne({ _id });
+  }
+
+  update(id: number, updateJobDto: UpdateJobDto) {
+    return `This action updates a #${id} job`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} job`;
   }
 }

@@ -1,8 +1,6 @@
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsBoolean,
-  IsDate,
   IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -27,8 +25,8 @@ export class CreateJobDto {
   name: string;
 
   @IsNotEmpty({ message: 'Skills không được để trống' })
-  @IsArray({ message: 'skills có định dạng là array' }) // check list skills
-  @IsString({ each: true, message: 'skill có định dạng là string' }) // check each skill in skills
+  @IsArray({ message: 'skills có định dạng là array' })
+  @IsString({ each: true, message: 'skill có định dạng là string' })
   skills: string[];
 
   @IsNotEmptyObject()
@@ -53,18 +51,8 @@ export class CreateJobDto {
   description: string; //html
 
   @IsNotEmpty({ message: 'Started Date không được để trống' })
-  @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'endDate có định dạng là Date' })
   startDate: Date;
 
   @IsNotEmpty({ message: 'Ended Date không được để trống' })
-  @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'endDate có định dạng là Date' })
   endDate: Date;
-
-  @IsNotEmpty({ message: 'isActive không được để trống' })
-  @IsBoolean({ message: 'isActive có định dạng là boolean' })
-  isActive: boolean;
-
-  // check endDate sau startDate ở đây hoặc trong service
 }

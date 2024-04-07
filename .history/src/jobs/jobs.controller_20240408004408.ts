@@ -53,6 +53,6 @@ export class JobsController {
   @Delete(':id')
   @ResponseMessage('Delete a job by id')
   remove(@Param('id') id: string, @User() userReq: IUser) {
-    return this.jobsService.remove(id, userReq);
+    return this.jobsService.remove(+id);
   }
 }
