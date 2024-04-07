@@ -13,13 +13,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-      // Passport requires some initialization: token trong request header + xin signature
-      // Passport sau đó decode token
-      // Passport auto gọi validate() để pass the decoded JSON as its single parameter.
+      // lấy access token trong request header + lấy key
     });
   }
 
   async validate(payload: IUser) {
+    // payload được lấy từ token đã giải mã + gán vào req.user
     const { _id, name, email, role } = payload;
     return {
       _id,

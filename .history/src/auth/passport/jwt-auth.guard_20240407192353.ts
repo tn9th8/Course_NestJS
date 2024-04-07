@@ -12,8 +12,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   // Guard sẽ check ta sẽ sử dụng jwt strategy
 
   constructor(private reflector: Reflector) {
-    // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
-    super();
+    super(); // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
   }
   // For this, you can extend the built-in class and override methods within a sub-class:
 

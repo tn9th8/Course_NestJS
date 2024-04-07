@@ -15,6 +15,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
     super();
   }
+
+  // to simply extend the default error handling or authentication logic.
   // For this, you can extend the built-in class and override methods within a sub-class:
 
   canActivate(context: ExecutionContext) {

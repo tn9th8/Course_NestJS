@@ -15,11 +15,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
     super();
   }
+
+  // to simply extend the default error handling or authentication logic.
   // For this, you can extend the built-in class and override methods within a sub-class:
 
   canActivate(context: ExecutionContext) {
     // Overide
-    // Add your custom authentication logic here: truyền key để lấy value của metadata
+    // Add your custom authentication logic here: truyền key để lấy value
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -32,9 +34,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
+  // Overide
+  // Add your custom authentication logic here
   handleRequest(err, user, info) {
-    // Overide
-    // Customize the default error handling
+    // bắn ra nếu có lỗi
     if (err || !user) {
       throw (
         err ||
