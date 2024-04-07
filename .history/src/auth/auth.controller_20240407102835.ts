@@ -16,7 +16,8 @@ import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
 @Controller('auth') // route "/"
 export class AuthController {
   constructor(
-    private authService: AuthService, // private usersService: UsersService,
+    private authService: AuthService,
+    private usersService: UsersService,
   ) {}
 
   @Public()

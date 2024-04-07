@@ -7,7 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
-import { User as UserReq } from 'src/decorator/customize';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +21,7 @@ export class UsersService {
     return hash;
   };
 
-  async create(userDto: CreateUserDto, @UserReq() userReq: IUser) {
+  async create(userDto: CreateUserDto, userReq: IUser) {
     const { name, email, password, age, gender, address, role, company } =
       userDto;
 
@@ -48,8 +47,8 @@ export class UsersService {
       role,
       company,
       createdBy: {
-        _id: userReq._id,
-        email: userReq.email,
+        _id: user._id,
+        email: user.email,
       },
     });
 
@@ -101,19 +100,11 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  async update(userDto: UpdateUserDto, @UserReq() userReq: IUser) {
-    let newUser = await this.userModel.updateOne(
-      { _id: userDto._id },
-      {
-        ...userDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
+  async update(updateUserDto: UpdateUserDto) {
+    return await this.userModel.updateOne(
+      { _id: updateUserDto._id },
+      { ...updateUserDto },
     );
-
-    return newUser;
   }
 
   remove(id: string) {

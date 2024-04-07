@@ -68,7 +68,7 @@ export class UsersService {
       );
     }
 
-    let userRegister = await this.userModel.create({
+    let newUser = await this.userModel.create({
       name,
       email,
       password: hashPassword,
@@ -78,7 +78,7 @@ export class UsersService {
       role: 'USER',
     });
 
-    return userRegister;
+    return newUser;
   }
 
   findAll() {
@@ -102,18 +102,10 @@ export class UsersService {
   }
 
   async update(userDto: UpdateUserDto, @UserReq() userReq: IUser) {
-    let newUser = await this.userModel.updateOne(
-      { _id: userDto._id },
-      {
-        ...userDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
+    return await this.userModel.updateOne(
+      { _id: updateUserDto._id },
+      { ...updateUserDto },
     );
-
-    return newUser;
   }
 
   remove(id: string) {

@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({ timestamps: true }) // biến class thành 1 schema // lấy time at
+@Schema({ timestamps: true }) // biến class thành 1 schema // lấy timestamps
 export class User {
   @Prop()
   name: string;

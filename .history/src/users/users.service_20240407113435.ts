@@ -106,7 +106,7 @@ export class UsersService {
       { _id: userDto._id },
       {
         ...userDto,
-        updatedBy: {
+        createdBy: {
           _id: userReq._id,
           email: userReq.email,
         },

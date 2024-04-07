@@ -42,15 +42,17 @@ export class UsersController {
   }
 
   @Patch()
-  @ResponseMessage('Update a user')
   update(@Body() userDto: UpdateUserDto, @User() userReq: IUser) {
-    return this.usersService.update(userDto, userReq);
+    let newUser = this.usersService.update(userDto, userReq);
+    return {
+      _id: newUser?._id,
+      createdAt: newUser?.createdAt,
+    };
   }
 
   @Delete(':id')
-  @ResponseMessage('Delte a user')
-  remove(@Param('id') id: string, @User() userReq: IUser) {
-    // return this.usersService.remove(id, userReq);
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 
   // Note: với @Get(':id') và @Get('/getAll'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào

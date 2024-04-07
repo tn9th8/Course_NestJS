@@ -7,7 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
-import { User as UserReq } from 'src/decorator/customize';
 
 @Injectable()
 export class UsersService {
@@ -22,11 +21,11 @@ export class UsersService {
     return hash;
   };
 
-  async create(userDto: CreateUserDto, @UserReq() userReq: IUser) {
+  async create(userDto: CreateUserDto, userReq: IUser) {
     const { name, email, password, age, gender, address, role, company } =
       userDto;
 
-    // logic check mail
+    // add logic check existing mail
     const isExist = await this.userModel.findOne({ email });
     if (isExist) {
       throw new BadRequestException(
@@ -37,7 +36,8 @@ export class UsersService {
     // hash
     const hashPassword = this.getHashPassword(userDto.password);
 
-    // create
+    let user = await this.userModel.create({ ...userDto });
+
     let newUser = await this.userModel.create({
       name,
       email,
@@ -47,10 +47,6 @@ export class UsersService {
       address,
       role,
       company,
-      createdBy: {
-        _id: userReq._id,
-        email: userReq.email,
-      },
     });
 
     return newUser;
@@ -101,19 +97,11 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  async update(userDto: UpdateUserDto, @UserReq() userReq: IUser) {
-    let newUser = await this.userModel.updateOne(
-      { _id: userDto._id },
-      {
-        ...userDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
+  async update(updateUserDto: UpdateUserDto) {
+    return await this.userModel.updateOne(
+      { _id: updateUserDto._id },
+      { ...updateUserDto },
     );
-
-    return newUser;
   }
 
   remove(id: string) {

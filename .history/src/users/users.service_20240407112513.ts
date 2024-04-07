@@ -101,19 +101,11 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  async update(userDto: UpdateUserDto, @UserReq() userReq: IUser) {
-    let newUser = await this.userModel.updateOne(
-      { _id: userDto._id },
-      {
-        ...userDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
-      },
+  async update(userDto: userDto) {
+    return await this.userModel.updateOne(
+      { _id: updateUserDto._id },
+      { ...updateUserDto },
     );
-
-    return newUser;
   }
 
   remove(id: string) {

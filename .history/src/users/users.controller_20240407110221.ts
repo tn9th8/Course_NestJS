@@ -25,7 +25,7 @@ export class UsersController {
       _id: newUser?._id,
       createdAt: newUser?.createdAt,
     };
-    // userDto: lấy các trường trong dto và có sức mạnh @Body (dựa vào req.body để lấy giá trị trả về)
+    // biến createUserDto: lấy các trường trong dto và có sức mạnh @Body (dựa vào req.body để lấy giá trị trả về)
     // @Body('email') email: string // const email: sting = req.body.email // overload với @Body khác
   }
 
@@ -36,23 +36,19 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
-    // TS: @Param('id')
-    // JS: const id: sting = req.param.id
+    // const id: sting = req.param.email //
+    return this.usersService.findOne(id); // +id: convert string ==> number
   }
+  // Note: với @Get(':id') và @Get('/getAll'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào
+  // So: cái nào cần (2 @Get có route) sẽ chuyển sang @Post và đưa data vào body
 
   @Patch()
-  @ResponseMessage('Update a user')
-  update(@Body() userDto: UpdateUserDto, @User() userReq: IUser) {
-    return this.usersService.update(userDto, userReq);
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(updateUserDto);
   }
 
   @Delete(':id')
-  @ResponseMessage('Delte a user')
-  remove(@Param('id') id: string, @User() userReq: IUser) {
-    // return this.usersService.remove(id, userReq);
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
-
-  // Note: với @Get(':id') và @Get('/getAll'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào
-  // So: cái nào cần (2 @Get có route) sẽ chuyển sang @Post và đưa data vào body
 }

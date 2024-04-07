@@ -50,7 +50,7 @@ export class UsersController {
   @Delete(':id')
   @ResponseMessage('Delte a user')
   remove(@Param('id') id: string, @User() userReq: IUser) {
-    // return this.usersService.remove(id, userReq);
+    return this.usersService.remove(id, userReq);
   }
 
   // Note: với @Get(':id') và @Get('/getAll'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào

@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public } from 'src/decorator/customize';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
@@ -16,9 +16,11 @@ import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
 @Controller('auth') // route "/"
 export class AuthController {
   constructor(
-    private authService: AuthService, // private usersService: UsersService,
+    private authService: AuthService,
+    private usersService: UsersService,
   ) {}
 
+  // Guard
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -26,15 +28,15 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  // @UseGuards(JwtAuthGuard) // off code vì đã enable globally
   @Public()
-  @ResponseMessage('Register a new user')
-  @Post('/register')
+  @Post('register')
   handleRegister(@Body() registerUserDto: RegisterUserDto) {
-    return this.authService.register(registerUserDto);
-    // return this.usersService.register(registerUserDto);
     // ko truyền @User() user: IUser vì ko có JWT
+    return this.usersService.handleRegisterUser(registerUserDto);
   }
 
+  // @UseGuards(JwtAuthGuard) // off code vì đã enable globally
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

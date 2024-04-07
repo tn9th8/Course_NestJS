@@ -102,16 +102,30 @@ export class UsersService {
   }
 
   async update(userDto: UpdateUserDto, @UserReq() userReq: IUser) {
-    let newUser = await this.userModel.updateOne(
-      { _id: userDto._id },
-      {
-        ...userDto,
-        updatedBy: {
-          _id: userReq._id,
-          email: userReq.email,
-        },
+    const { _id, name, email, age, gender, address, role, company } = userDto;
+
+    // logic check mail
+    const isExist = await this.userModel.findOne({ email });
+    if (isExist) {
+      throw new BadRequestException(
+        `Email ${email} đã tồn tại. Vui lòng sử dụng email khác`,
+      );
+    }
+
+    // create
+    let newUser = await this.userModel.create({
+      name,
+      email,
+      age,
+      gender,
+      address,
+      role,
+      company,
+      createdBy: {
+        _id: userReq._id,
+        email: userReq.email,
       },
-    );
+    });
 
     return newUser;
   }
