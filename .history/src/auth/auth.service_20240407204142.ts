@@ -134,10 +134,9 @@ export class AuthService {
   }
 
   async logout(user: IUser, response: Response) {
-    await this.usersService.updateUserToken('', user._id);
+    // update refresh token of user = null/ empty
+    this.usersService.updateUserToken('null', user._id);
+    // set refresh_token as cookies at client
     response.clearCookie('refresh_token');
-    return 'done';
-    // update server: refresh token = null/ empty
-    // update client:  clear refresh_token as cookies
   }
 }

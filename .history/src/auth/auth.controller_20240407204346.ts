@@ -57,7 +57,7 @@ export class AuthController {
     // làm việc với cookie nên cần response
   }
 
-  @Post('/logout')
+  @Get('/logout')
   @ResponseMessage('Logout User')
   handleLogout(
     @User() user: IUser,

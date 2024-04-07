@@ -57,13 +57,14 @@ export class AuthController {
     // làm việc với cookie nên cần response
   }
 
-  @Post('/logout')
+  @Get('/refresh')
   @ResponseMessage('Logout User')
-  handleLogout(
-    @User() user: IUser,
+  handleRefreshToken(
+    @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    return this.authService.logout(user, response);
+    const refreshToken = request.cookies['refresh_token'];
+    return this.authService.processNewToken(refreshToken, response);
     // làm việc với cookie nên cần response
   }
 }
