@@ -42,6 +42,6 @@ export class AuthController {
   @Get('/account')
   @ResponseMessage('Get user information')
   handleGetAccount(@User() user: IUser) {
-    return { user }; // JS: req.user
+    return { user };
   }
 }

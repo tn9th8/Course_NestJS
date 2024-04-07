@@ -8,23 +8,23 @@ import { IUser } from 'src/users/users.interface';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   // Strategy là thư viện xử lý token như encode, decode
 
-  // lấy jwt trong request header và decode
   constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      // lấy jwt trong request header và decode
     });
   }
 
-  // auto lấy payload và gán vào req.user
   async validate(payload: IUser) {
+    // giải mã payload trong jwt
     const { _id, name, email, role } = payload;
     return {
       _id,
       name,
       email,
       role,
-    };
+    }; // return là gán biến {...} vào req.user
   }
 }

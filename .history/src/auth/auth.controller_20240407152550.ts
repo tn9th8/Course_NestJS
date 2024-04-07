@@ -9,12 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public, ResponseMessage, User } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
-import { IUser } from 'src/users/users.interface';
 
 @Controller('auth') // route "/"
 export class AuthController {
@@ -41,7 +40,7 @@ export class AuthController {
 
   @Get('/account')
   @ResponseMessage('Get user information')
-  handleGetAccount(@User() user: IUser) {
-    return { user }; // JS: req.user
+  getProfile(@Req() req) {
+    return req.user; // @Request
   }
 }
