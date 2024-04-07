@@ -7,12 +7,13 @@ import { ConfigService } from '@nestjs/config';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   // Strategy là thư viện xử lý token như encode, decode
 
-  constructor() { // private configService: ConfigService
+  constructor() {
+    // private configService: ConfigService
     // lấy jwt trong request
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: "configService.get<string>('JWT_ACCESS_TOKEN')",
+      secretOrKey: "configService.get<string>('JWT_ACCESS_TOKEN_SECRET')",
     });
   }
 
