@@ -82,28 +82,42 @@ export class UsersService {
     return userRegister;
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
+  findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
     delete filter.page;
     delete filter.limit;
+    // return { filter }; // check filter thấy dự page và limit nên phải xóa
+    // { projection, population } để join bảng
     // regular expression:
-    // - filter của thư viện sẽ biến thành qs của mongoDB
-    // - VD: /pattern/i :: LIKE operator on mongoose
+    // - filter của thư viện sẽ biểu = thành eq của mongoDB
+    // - LIKE operator on mongoose: /pattern/i
 
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
     // count all documents theo điều kiện filter
+    const totalItems = (await this.companyModel.find(filter)).length;
     // chia và làm tròn ra tổng số trang
-    const totalItems = (await this.userModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const result = await this.userModel
+    // sort(sort) có bug
+    // vì 2 package mongoose và api-query-param bị bênh / lỗi
+    // vì TS và JS bị mẫu thuẫn type do TS check type
+
+    // Cách 1 fix: ý là code mình đã chắc đúng, bảo TS ko check type nữa
+    // @ts-ignore: Unreachable code error
+
+    // Cách 2 fix: dùng any everywhere => ép kiểu về phía bên phải
+    // .sort(sort as any)
+
+    // Cách 3 fix: dùng any => convert types of destructuring object in TS
+    // let {sort}: {sort: any} = aqp(sq) // khai báo biến và ép kiểu bên cạch
+    // let { sort }= <{sort: any}>aqp(rq);
+    const result = await this.companyModel
       .find(filter)
       .skip(offset)
       .limit(defaultLimit)
       .sort(sort as any)
-      .select('-password')
       .populate(population)
       .exec();
 

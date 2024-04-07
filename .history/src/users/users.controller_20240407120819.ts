@@ -37,7 +37,7 @@ export class UsersController {
     @Query('limit') limit: string,
     @Query() qs: string,
   ) {
-    return this.usersService.findAll(+currentPage, +limit, qs);
+    return this.usersService.findAll();
   }
 
   @Public()

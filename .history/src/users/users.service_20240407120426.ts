@@ -8,7 +8,6 @@ import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
 import { User as UserReq } from 'src/decorator/customize';
-import aqp from 'api-query-params';
 
 @Injectable()
 export class UsersService {
@@ -82,40 +81,8 @@ export class UsersService {
     return userRegister;
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
-    delete filter.page;
-    delete filter.limit;
-    // regular expression:
-    // - filter của thư viện sẽ biến thành qs của mongoDB
-    // - VD: /pattern/i :: LIKE operator on mongoose
-
-    let offset = (+currentPage - 1) * +limit;
-    let defaultLimit = +limit ? +limit : 10;
-
-    // count all documents theo điều kiện filter
-    // chia và làm tròn ra tổng số trang
-    const totalItems = (await this.userModel.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
-
-    const result = await this.userModel
-      .find(filter)
-      .skip(offset)
-      .limit(defaultLimit)
-      .sort(sort as any)
-      .select('-password')
-      .populate(population)
-      .exec();
-
-    return {
-      meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems, // tổng số phần tử (số bản ghi)
-      },
-      result, //kết quả query
-    };
+  findAll() {
+    return `This action returns all users`;
   }
 
   async findOne(id: string) {

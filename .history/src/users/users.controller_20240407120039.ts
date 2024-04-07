@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,21 +30,15 @@ export class UsersController {
   }
 
   @Get()
-  @ResponseMessage('Fetch user with pagnigate')
-  findAll(
-    @Query('page') currentPage: string,
-    @Query('limit') limit: string,
-    @Query() qs: string,
-  ) {
-    return this.usersService.findAll(+currentPage, +limit, qs);
+  findAll() {
+    return this.usersService.findAll();
   }
 
   @Public()
   @Get(':id')
   @ResponseMessage('Fetch a user by id')
   findOne(@Param('id') id: string) {
-    const foundUser = this.usersService.findOne(id);
-    return foundUser;
+    return this.usersService.findOne(id);
     // TS: @Param('id')
     // JS: const id: sting = req.param.id
   }
