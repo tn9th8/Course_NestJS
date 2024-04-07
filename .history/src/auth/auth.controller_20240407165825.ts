@@ -54,6 +54,5 @@ export class AuthController {
   ) {
     const refreshToken = request.cookies['refresh_token'];
     return this.authService.processNewToken(refreshToken, response);
-    // làm việc với cookie nên cần response
   }
 }

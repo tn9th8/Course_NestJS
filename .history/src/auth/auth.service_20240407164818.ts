@@ -47,7 +47,7 @@ export class AuthService {
     // set refresh_token as cookies at client
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
+      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')) * 1000, //milisecond
     });
 
     // response
@@ -72,51 +72,12 @@ export class AuthService {
     return refresh_token;
   };
 
-  processNewToken = async (refreshToken: string, response: Response) => {
+  processNewToken = async (refreshToken: string) => {
     try {
-      // verify: xác thực và decode refresh token luôn
+      // verify: xác thực và decode token luôn
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
-      // tìm user theo refresh token => update refresh token
-      let user = await this.usersService.findUserByToken(refreshToken);
-      if (user) {
-        const { _id, name, email, role } = user; // user: Model => _id: ObjectId
-        const payload = {
-          sub: 'token refresh',
-          iss: 'from server',
-          _id,
-          name,
-          email,
-          role,
-        };
-        const refresh_token = this.createRefreshToken(payload);
-
-        // update user with refresh token
-        await this.usersService.updateUserToken(refresh_token, _id.toString());
-
-        // set refresh_token as cookies at client
-        response.clearCookie('refresh_token');
-        response.cookie('refresh_token', refresh_token, {
-          httpOnly: true,
-          maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
-        });
-
-        // response
-        return {
-          access_token: this.jwtService.sign(payload),
-          user: {
-            _id,
-            name,
-            email,
-            role,
-          },
-        };
-      } else {
-        throw new BadRequestException(
-          `Refresh token không hợp lệ. Vui lòng login`,
-        );
-      }
     } catch (error) {
       throw new BadRequestException(
         `Refresh token không hợp lệ. Vui lòng login`,

@@ -47,7 +47,7 @@ export class AuthService {
     // set refresh_token as cookies at client
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
+      maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')) * 1000, //milisecond
     });
 
     // response
@@ -78,8 +78,9 @@ export class AuthService {
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
-      // tìm user theo refresh token => update refresh token
+      // tìm user theo refresh token
       let user = await this.usersService.findUserByToken(refreshToken);
+      // update refresh token
       if (user) {
         const { _id, name, email, role } = user; // user: Model => _id: ObjectId
         const payload = {
@@ -99,7 +100,8 @@ export class AuthService {
         response.clearCookie('refresh_token');
         response.cookie('refresh_token', refresh_token, {
           httpOnly: true,
-          maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')), //milisecond
+          maxAge:
+            ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')) * 1000, //milisecond
         });
 
         // response
