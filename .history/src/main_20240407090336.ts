@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 
@@ -34,14 +34,6 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
-  });
-
-  // enable URI versioning type
-  app.setGlobalPrefix('api');
-  app.enableVersioning({
-    type: VersioningType.URI, // dùng URI thì automatically prefixed with v by default: v1, v2
-    defaultVersion: ['1', '2'],
-    // prefix: 'api/v', // thay đổi thành tiền tố mới api/v // nhưng thiết professional
   });
 
   await app.listen(port);

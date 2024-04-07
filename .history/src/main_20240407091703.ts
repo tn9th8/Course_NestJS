@@ -40,8 +40,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI, // dùng URI thì automatically prefixed with v by default: v1, v2
-    defaultVersion: ['1', '2'],
     // prefix: 'api/v', // thay đổi thành tiền tố mới api/v // nhưng thiết professional
+    defaultVersion: ['1', '2'],
   });
 
   await app.listen(port);

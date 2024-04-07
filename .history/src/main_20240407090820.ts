@@ -36,12 +36,10 @@ async function bootstrap() {
     preflightContinue: false,
   });
 
-  // enable URI versioning type
-  app.setGlobalPrefix('api');
+  // enable URI version
   app.enableVersioning({
-    type: VersioningType.URI, // dùng URI thì automatically prefixed with v by default: v1, v2
+    type: VersioningType.URI,
     defaultVersion: ['1', '2'],
-    // prefix: 'api/v', // thay đổi thành tiền tố mới api/v // nhưng thiết professional
   });
 
   await app.listen(port);
