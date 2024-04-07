@@ -11,8 +11,8 @@ import { IS_PUBLIC_KEY } from 'src/decorator/customize';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   // Guard sẽ check ta sẽ sử dụng jwt strategy
 
-  // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
   constructor(private reflector: Reflector) {
+    // ta sẽ dùng class Reflector (phản chiếu) để lấy Metadate ra
     super();
   }
 

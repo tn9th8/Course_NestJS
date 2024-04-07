@@ -28,6 +28,7 @@ export class AuthService {
     return null;
   }
 
+  // dùng user: any là TS check type của biến này
   async login(user: IUser, response: Response) {
     const { _id, name, email, role } = user;
     const payload = {
