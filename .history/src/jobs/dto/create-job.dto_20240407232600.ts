@@ -43,12 +43,31 @@ export class CreateJobDto {
   @IsNotEmpty({ message: 'Level không được để trống' })
   level: string;
 
-  @IsNotEmpty({ message: 'Description không được để trống' })
+  @IsNotEmpty({ message: 'Role không được để trống' })
   description: string; //html
 
-  @IsNotEmpty({ message: 'Started Date không được để trống' })
   startDate: Date;
 
-  @IsNotEmpty({ message: 'Ended Date không được để trống' })
   endDate: Date;
+}
+
+export class RegisterUserDto {
+  @IsNotEmpty({ message: 'Name không được để trống' })
+  name: string;
+
+  @IsEmail({}, { message: 'Email phải đúng định dạng' })
+  @IsNotEmpty({ message: 'Email không được để trống' })
+  email: string;
+
+  @IsNotEmpty({ message: 'Password không được để trống' })
+  password: string;
+
+  @IsNotEmpty({ message: 'Age không được để trống' })
+  age: number;
+
+  @IsNotEmpty({ message: 'Gender không được để trống' })
+  gender: string;
+
+  @IsNotEmpty({ message: 'Address không được để trống' })
+  address: string;
 }
