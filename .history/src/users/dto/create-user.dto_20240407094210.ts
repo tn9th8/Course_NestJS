@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import mongoose from 'mongoose';
 
-// Validate object prop
+// Validate company object
 export class Company {
   @IsNotEmpty()
   _id: mongoose.Schema.Types.ObjectId;
