@@ -35,9 +35,9 @@ async function bootstrap() {
 
   // config CORS: để cho client-port-3000 có thể truy cập server
   app.enableCors({
-    origin: true, // 'http://localhost:3000', // ""
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // ""
-    preflightContinue: false, // ""
+    origin: '*', // 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
     credentials: true,
   });
 
