@@ -53,7 +53,7 @@ export class MulterConfigService implements MulterOptionsFactory {
         filename: (req, file, cb) => {
           let extName = path.extname(file.originalname); // get image extension: đuôi file
           let baseName = path.basename(file.originalname, extName); // get image's name: đầu file
-          let finalName = `${baseName}-${Date.now()}${extName}`; // get final name
+          let finalName = `${baseName}-${Date.now()}${extName}`;
           cb(null, finalName);
         },
       }),

@@ -28,12 +28,12 @@ export class FilesController {
   uploadFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
+        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }) // error 422
         .addFileTypeValidator({
           fileType:
             /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype
         })
-        .addMaxSizeValidator({ maxSize: 1024 * 1024 }) // KB = 1 MB
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }), // error 422
+        .addMaxSizeValidator({ maxSize: 1024 * 1024 }), // KB = 1 MB
     )
     file: Express.Multer.File,
   ) {

@@ -30,7 +30,7 @@ export class FilesController {
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType:
-            /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype
+            /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i,
         })
         .addMaxSizeValidator({ maxSize: 1024 * 1024 }) // KB = 1 MB
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }), // error 422
@@ -38,7 +38,10 @@ export class FilesController {
     file: Express.Multer.File,
   ) {
     console.log(file);
-    return { filename: file.filename };
+    return {
+      folder: file.destination,
+      filename: file.filename,
+    };
   }
 
   @Get()

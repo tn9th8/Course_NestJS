@@ -40,20 +40,20 @@ export class MulterConfigService implements MulterOptionsFactory {
 
   // createMulterOptions: cấu hình multer: nơi lưu file,...
   // diskStorage là ổ đĩa của chúng ta, lưu trong server, host BE ở đâu thì nó sẽ lưu ở đấy
-  // destination: override: lấy động folder lưu trữ file
-  // filename: overide: đặt tên file
+  // destination: override: thằng dest
+  // filename: overide: đổi tên file
   createMulterOptions(): MulterModuleOptions {
     return {
       storage: diskStorage({
         destination: (req, file, cb) => {
-          const folder = req?.headers?.folder_type ?? 'default'; // lấy req => header => folder_type:value : tên folder chỉ định  | folder default
-          this.ensureExists(`public/images/${folder}`); // check ? tạo thư mục
-          cb(null, join(this.getRootPath(), `public/images/${folder}`)); // ném về callback: error | null + destination string
+          const folder = req?.headers?.folder_type ?? 'default'; // lấy req => header => biến folder_type: tên foler lưu trữ
+          this.ensureExists(`public/images/${folder}`);
+          cb(null, join(this.getRootPath(), `public/images/${folder}`));
         },
         filename: (req, file, cb) => {
-          let extName = path.extname(file.originalname); // get image extension: đuôi file
-          let baseName = path.basename(file.originalname, extName); // get image's name: đầu file
-          let finalName = `${baseName}-${Date.now()}${extName}`; // get final name
+          let extName = path.extname(file.originalname); //get image extension
+          let baseName = path.basename(file.originalname, extName); //get image's name (without extension)
+          let finalName = `${baseName}-${Date.now()}${extName}`;
           cb(null, finalName);
         },
       }),

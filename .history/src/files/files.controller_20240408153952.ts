@@ -38,7 +38,10 @@ export class FilesController {
     file: Express.Multer.File,
   ) {
     console.log(file);
-    return { filename: file.filename };
+    return {
+      folder: file.destination,
+      filename: file.filename,
+    };
   }
 
   @Get()

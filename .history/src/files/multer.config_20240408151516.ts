@@ -51,9 +51,9 @@ export class MulterConfigService implements MulterOptionsFactory {
           cb(null, join(this.getRootPath(), `public/images/${folder}`)); // ném về callback: error | null + destination string
         },
         filename: (req, file, cb) => {
-          let extName = path.extname(file.originalname); // get image extension: đuôi file
-          let baseName = path.basename(file.originalname, extName); // get image's name: đầu file
-          let finalName = `${baseName}-${Date.now()}${extName}`; // get final name
+          let extName = path.extname(file.originalname); //get image extension: đuôi file
+          let baseName = path.basename(file.originalname, extName); //get image's name: đầu file
+          let finalName = `${baseName}-${Date.now()}${extName}`;
           cb(null, finalName);
         },
       }),
