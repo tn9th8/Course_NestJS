@@ -47,7 +47,7 @@ export class MulterConfigService implements MulterOptionsFactory {
       storage: diskStorage({
         destination: (req, file, cb) => {
           const folder = req?.headers?.folder_type ?? 'default'; // lấy req => header => folder_type:value : tên folder chỉ định  | folder default
-          this.ensureExists(`public/image/${folder}`); // check ? tạo thư mục
+          this.ensureExists(`public/images/${folder}`); // check ? tạo thư mục
           cb(null, join(this.getRootPath(), `public/image/${folder}`)); // ném về callback: error | null + destination string
         },
         filename: (req, file, cb) => {
