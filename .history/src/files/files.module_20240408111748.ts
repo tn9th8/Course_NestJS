@@ -5,13 +5,12 @@ import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from './multer.config';
 
 @Module({
-  controllers: [FilesController],
-  providers: [FilesService],
   imports: [
     MulterModule.registerAsync({
       useClass: MulterConfigService,
-      // MulterModule ko thể config globally trong app.module hay main
     }),
   ],
+  controllers: [FilesController],
+  providers: [FilesService],
 })
 export class FilesModule {}
