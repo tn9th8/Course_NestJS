@@ -29,7 +29,8 @@ export class FilesController {
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType:
-            /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype
+            /\.(jpg|jpeg|png|image\/png|gif|txt|pdf|docx|text\/plain)$/i, // regular expression // minetype
+          // fileType: 'text/plain', // .txt
         })
         .addMaxSizeValidator({
           maxSize: 1024 * 1024, // KB = 1 MB

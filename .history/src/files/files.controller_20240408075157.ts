@@ -28,11 +28,10 @@ export class FilesController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType:
-            /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype
+          fileType: 'png',
         })
         .addMaxSizeValidator({
-          maxSize: 1024 * 1024, // KB = 1 MB
+          maxSize: 3000,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, // error 422
