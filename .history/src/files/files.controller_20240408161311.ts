@@ -34,7 +34,7 @@ export class FilesController {
       new ParseFilePipeBuilder() // sau đó mới chạy pipe
         .addFileTypeValidator({
           fileType:
-            /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|pdf|application\/pdf|docx|txt|text\/plain)$/i, // regular expression // minetype
+            /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype
         })
         .addMaxSizeValidator({ maxSize: 1024 * 1024 }) // KB = 1 MB
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }), // error 422

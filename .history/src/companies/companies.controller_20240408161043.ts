@@ -26,7 +26,6 @@ export class CompaniesController {
   }
 
   @Get()
-  @Public()
   @ResponseMessage('Fetch list companies with panigation')
   findAll(
     @Query('current') currentPage: string,
@@ -42,7 +41,6 @@ export class CompaniesController {
   }
 
   @Get(':id')
-  @Public()
   findOne(@Param('id') id: string) {
     return this.companiesService.findOne(+id);
   }

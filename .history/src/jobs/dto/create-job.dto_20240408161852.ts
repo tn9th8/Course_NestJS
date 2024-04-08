@@ -19,9 +19,6 @@ class Company {
 
   @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
-  logo: string;
 }
 
 // Data transfer object // class = {}
