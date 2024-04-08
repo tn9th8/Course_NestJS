@@ -21,7 +21,7 @@ export class FilesController {
 
   @Public() //
   @Post('upload')
-  @UseInterceptors(FileInterceptor('hoidanit')) // key
+  @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
   }

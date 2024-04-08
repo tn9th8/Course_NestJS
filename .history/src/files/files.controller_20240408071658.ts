@@ -13,15 +13,13 @@ import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Public } from 'src/decorator/customize';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Public() //
   @Post('upload')
-  @UseInterceptors(FileInterceptor('hoidanit')) // key
+  @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
   }
