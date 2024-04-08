@@ -23,15 +23,14 @@ export class FilesController {
 
   // Upload file
   // request => interceptor => pipe (validate) => response
-  // bug: upload file at interceptor, then validate
-  // fix: xử lí ở interceptor | viết pipe xóa file
+  // upload file at interceptor, then validate => bug
   @Public()
   @Post('upload')
   @ResponseMessage('Upload Single File')
-  @UseInterceptors(FileInterceptor('hoidanit')) // key // chạy interceptor trước
+  @UseInterceptors(FileInterceptor('hoidanit')) // key
   uploadFile(
     @UploadedFile(
-      new ParseFilePipeBuilder() // sau đó mới chạy pipe
+      new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType:
             /^(jpg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|docx|text\/plain)$/i, // regular expression // minetype

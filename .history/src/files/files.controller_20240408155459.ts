@@ -24,7 +24,7 @@ export class FilesController {
   // Upload file
   // request => interceptor => pipe (validate) => response
   // bug: upload file at interceptor, then validate
-  // fix: xử lí ở interceptor | viết pipe xóa file
+  // fix: xử lí ở interceptor, hoặc viết pipe xóa file
   @Public()
   @Post('upload')
   @ResponseMessage('Upload Single File')
