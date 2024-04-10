@@ -14,15 +14,6 @@ import { FilesModule } from './files/files.module';
 import { ResumesModule } from './resumes/resumes.module';
 
 @Module({
-  controllers: [AppController],
-  providers: [
-    AppService,
-    // {
-    //   // a object variable to enable guard globally
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-  ],
   imports: [
     // MongooseModule.forRoot('mongodb+srv://hoidanit:PmhfIt5Gb8O7yhnA@cluster0.lpmbkzr.mongodb.net/'),
     MongooseModule.forRootAsync({
@@ -46,6 +37,15 @@ import { ResumesModule } from './resumes/resumes.module';
     JobsModule,
     FilesModule,
     ResumesModule,
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    // {
+    //   // a object variable to enable guard globally
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
   ],
 })
 export class AppModule {}
