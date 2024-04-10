@@ -86,6 +86,8 @@ export class CompaniesService {
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
+    // check id hop le
+
     return await this.companyModel.updateOne(
       { _id: id },
       {
