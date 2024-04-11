@@ -127,13 +127,16 @@ export class UsersService {
       .findOne({
         _id: id,
       })
-      .select('-password');
+      .select('-password')
+      .populate({ path: 'role', select: { name: 1, _id: 1 } });
     // -password :: exclude >< include
     // return this.userModel.findOne({ _id: id });
   }
 
   findOneByUsername(username: string) {
-    return this.userModel.findOne({ email: username });
+    return this.userModel
+      .findOne({ email: username })
+      .populate({ path: 'role', select: { name: 1, permissions: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -159,6 +162,14 @@ export class UsersService {
     // validate:
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'Not found user';
+    }
+
+    // logic: prevent removing admin email:
+    // nen config dong trong .env
+    const emailAdmin = 'admin@gmail.com';
+    const foundUser = await this.userModel.findById(id);
+    if (foundUser.email === emailAdmin) {
+      throw new BadRequestException(`Không thể xóa email admin=${emailAdmin}`);
     }
 
     // updateOne( detetedBy ) + softDelete

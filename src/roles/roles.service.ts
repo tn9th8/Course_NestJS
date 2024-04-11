@@ -71,8 +71,8 @@ export class RolesService {
       throw new BadRequestException(`not found company with id=${id}`); // status: 200 => 400
     }
     return await this.roleModel.findById(id).populate({
-      path: 'permissions',
-      select: { _id: 1, name: 1, apiPath: 1, method: 1 }, // -1: ko lay, 1: lay
+      path: 'permissions', // giống với prop trong role schema
+      select: { _id: 1, name: 1, apiPath: 1, method: 1, module: 1 }, // -1: ko lay, 1: lay
     });
   }
 
@@ -81,12 +81,8 @@ export class RolesService {
       throw new BadRequestException(`not found company with id=${_id}`); // status: 200 => 400
     }
 
-    // check if is exist name ?
-    const { name } = updateRoleDto;
-    const isExist = await this.roleModel.findOne({ name });
-    if (isExist) {
-      throw new BadRequestException(`Role với name=${name} đã tồn tại`);
-    }
+    // check name khác với nhưng thằng còn lại?
+    // to do
 
     return await this.roleModel.updateOne(
       { _id },
@@ -101,6 +97,14 @@ export class RolesService {
     // check if is valid following a mongo object id
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw new BadRequestException(`not found company with id=${_id}`); // status: 200 => 400
+    }
+
+    // logic: prevent removing role admin:
+    // nen config dong trong .env
+    const roleAdmin = 'ADMIN';
+    const foundRole = await this.roleModel.findById(_id);
+    if (foundRole.name === roleAdmin) {
+      throw new BadRequestException(`Không thể xóa role admin=${roleAdmin}`);
     }
 
     // check if is not exist the mongo object id ?
