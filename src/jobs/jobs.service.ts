@@ -87,7 +87,7 @@ export class JobsService {
     await this.jobModel.updateOne(
       { _id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: userReq._id,
           email: userReq.email,
         },

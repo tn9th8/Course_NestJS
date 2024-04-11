@@ -67,7 +67,7 @@ export class Job {
   updatedAt: Date;
 
   @Prop()
-  isDelete: boolean;
+  isDeleted: boolean;
 
   @Prop()
   deletedAt: Date;

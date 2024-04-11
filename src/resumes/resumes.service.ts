@@ -122,7 +122,7 @@ export class ResumesService {
     await this.resumeModel.updateOne(
       { _id: id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: user._id,
           email: user.email,
         },

@@ -165,7 +165,7 @@ export class UsersService {
     await this.userModel.updateOne(
       { _id: id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: userReq._id,
           email: userReq.email,
         },
