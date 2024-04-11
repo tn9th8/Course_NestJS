@@ -67,7 +67,7 @@ export class DatabasesService implements OnModuleInit {
       // create users
       if (countUser === 0) {
         const adminRole = await this.roleModel.findOne({ name: ADMIN_ROLE });
-        const userRole = await this.userModel.findOne({ name: USER_ROLE });
+        const userRole = await this.roleModel.findOne({ name: USER_ROLE });
         await this.userModel.insertMany([
           {
             name: "I'm admin",

@@ -7,6 +7,7 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
+import { ADMIN_ROLE } from 'src/databases/sample';
 
 @Injectable()
 export class RolesService {
@@ -100,11 +101,9 @@ export class RolesService {
     }
 
     // logic: prevent removing role admin:
-    // nen config dong trong .env
-    const roleAdmin = 'ADMIN';
     const foundRole = await this.roleModel.findById(_id);
-    if (foundRole.name === roleAdmin) {
-      throw new BadRequestException(`Không thể xóa role admin=${roleAdmin}`);
+    if (foundRole.name === ADMIN_ROLE) {
+      throw new BadRequestException(`Không thể xóa role admin=${ADMIN_ROLE}`);
     }
 
     // check if is not exist the mongo object id ?
