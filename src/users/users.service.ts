@@ -11,6 +11,7 @@ import { User as UserReq } from 'src/decorator/customize';
 import aqp from 'api-query-params';
 import { Role, RoleDocument } from 'src/roles/schemas/role.schemas';
 import { USER_ROLE } from 'src/databases/sample';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
@@ -18,8 +19,10 @@ export class UsersService {
     @InjectModel(User.name) // connect shema of mongo
     private userModel: SoftDeleteModel<UserDocument>, // private userModel: Model<User>, // data type
 
-    @InjectModel(Role.name) // connect shema of mongo
-    private roleModel: SoftDeleteModel<RoleDocument>, // private userModel: Model<User>, // data type
+    @InjectModel(Role.name)
+    private roleModel: SoftDeleteModel<RoleDocument>,
+
+    private configService: ConfigService,
   ) {}
 
   getHashPassword = (plainPassword: string) => {
@@ -177,10 +180,10 @@ export class UsersService {
 
     // logic: prevent removing admin email:
     // nen config dong trong .env
-    const emailAdmin = 'admin@gmail.com';
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
     const foundUser = await this.userModel.findById(id);
-    if (foundUser.email === emailAdmin) {
-      throw new BadRequestException(`Không thể xóa email admin=${emailAdmin}`);
+    if (foundUser.email === adminEmail) {
+      throw new BadRequestException(`Không thể xóa email admin=${adminEmail}`);
     }
 
     // updateOne( detetedBy ) + softDelete
