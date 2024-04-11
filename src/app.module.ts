@@ -5,8 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 import { CompaniesModule } from './companies/companies.module';
 import { JobsModule } from './jobs/jobs.module';
@@ -14,17 +12,11 @@ import { FilesModule } from './files/files.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
+import { DatabasesModule } from './databases/databases.module';
 
 @Module({
   controllers: [AppController],
-  providers: [
-    AppService,
-    // {
-    //   // a object variable to enable guard globally
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-  ],
+  providers: [AppService],
   imports: [
     // MongooseModule.forRoot('mongodb+srv://hoidanit:PmhfIt5Gb8O7yhnA@cluster0.lpmbkzr.mongodb.net/'),
     MongooseModule.forRootAsync({
@@ -50,6 +42,7 @@ import { RolesModule } from './roles/roles.module';
     ResumesModule,
     PermissionsModule,
     RolesModule,
+    DatabasesModule,
   ],
 })
 export class AppModule {}
