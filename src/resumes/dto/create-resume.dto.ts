@@ -1,12 +1,4 @@
-import { Type } from 'class-transformer';
-import {
-  IsEmail,
-  IsMongoId,
-  IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
+import { IsEmail, IsMongoId, IsNotEmpty } from 'class-validator';
 import mongoose from 'mongoose';
 
 // Data transfer object
