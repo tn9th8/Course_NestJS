@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from 'src/decorator/customize';
+import { IS_PUBLIC_KEY, IS_PUBLIC_PERMISSION } from 'src/decorator/customize';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -41,6 +41,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // Lấy kết quả từ jwt strategy (validate)
     const request: Request = context.switchToHttp().getRequest();
 
+    const isPublicPerminssion = this.reflector.getAllAndOverride<boolean>(
+      IS_PUBLIC_PERMISSION,
+      [context.getHandler(), context.getClass()],
+    );
+
     if (err || !user) {
       throw (
         err ||
@@ -66,10 +71,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       isExist = true;
     }
 
-    if (!isExist) {
+    // neu ko ton tai permission + ko skip permission // 200 => 403: ko có quyền
+    if (!isExist && !isPublicPerminssion) {
       throw new ForbiddenException(
         'Bạn không có quyền hạn (permission) truy cập endpoint này',
-      ); // 200 => 403: ko có quyền
+      );
     }
     return user;
   }

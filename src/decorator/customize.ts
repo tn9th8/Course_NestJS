@@ -24,3 +24,9 @@ export const User = createParamDecorator(
     // coust user = req.user; ==> cách cũ này không tường minh và mất 2 lần code
   },
 );
+
+export const IS_PUBLIC_PERMISSION = 'isPublicPerminssion';
+export const SkipCheckPermission = () =>
+  SetMetadata(IS_PUBLIC_PERMISSION, true);
+// tạo decorator Public để truyền thêm Metadate vào function
+// Metadate sẽ được lấy theo (key, value)
