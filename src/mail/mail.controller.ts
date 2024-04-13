@@ -23,14 +23,10 @@ export class MailController {
     private jobModel: SoftDeleteModel<JobDocument>,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
-  handleCron() {
-    console.log('>>> call me');
-  }
-
   @Get()
   @Public()
   @ResponseMessage('Send a new-job email')
+  @Cron('0 0 7 * * 0') // Every Sun, 7h:0m:0s // @Cron('10 * * * * *')
   async handleSendEmail() {
     const jobs = [
       {
