@@ -27,7 +27,7 @@ export class MailController {
   @Public()
   @ResponseMessage('Send a new-job email')
   @Cron('0 0 7 * * 0') // Every Sun, 7h:0m:0s // @Cron('10 * * * * *')
-  async handleSendEmail() {
+  async handleSendMail() {
     const jobs = [
       {
         name: 'Web Developer (Java, Javascript)',
