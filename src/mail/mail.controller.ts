@@ -7,22 +7,31 @@ import { Job, JobDocument } from 'src/jobs/schemas/job.schemas';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
 import { Subscriber } from 'rxjs';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Controller('mail')
 export class MailController {
   constructor(
     private readonly mailService: MailService,
+
     private readonly mailerService: MailerService,
+
     @InjectModel(Subscriber.name)
     private subscriberModel: SoftDeleteModel<SubscriberDocument>,
+
     @InjectModel(Job.name)
     private jobModel: SoftDeleteModel<JobDocument>,
   ) {}
 
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  handleCron() {
+    console.log('>>> call me');
+  }
+
   @Get()
   @Public()
-  @ResponseMessage('Test email')
-  async handleTestEmail() {
+  @ResponseMessage('Send a new-job email')
+  async handleSendEmail() {
     const jobs = [
       {
         name: 'Web Developer (Java, Javascript)',

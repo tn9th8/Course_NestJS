@@ -15,12 +15,13 @@ import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { MailModule } from './mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   controllers: [AppController],
   providers: [AppService],
   imports: [
-    // MongooseModule.forRoot('mongodb+srv://hoidanit:PmhfIt5Gb8O7yhnA@cluster0.lpmbkzr.mongodb.net/'),
+    // MongooseModule.forRoot('mongodb url')
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -32,10 +33,8 @@ import { MailModule } from './mail/mail.module';
       }),
       inject: [ConfigService],
     }),
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-      // isGlobal: true,
-    }),
+    ConfigModule.forRoot({ envFilePath: '.env' }), // isGlobal: true,
+    ScheduleModule.forRoot(),
     UsersModule,
     AuthModule,
     CompaniesModule,

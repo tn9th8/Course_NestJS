@@ -27,8 +27,8 @@ async function bootstrap() {
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
-  // config middleware: auto-validation-pipe
-  app.useGlobalPipes(new ValidationPipe());
+  // config middleware: validation-pipe // whitelist: tranh update mat data
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   // config cookies: server can read and set cookies at client
   app.use(cookieParser());
