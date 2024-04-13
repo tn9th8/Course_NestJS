@@ -3,6 +3,7 @@ import { SubscribersService } from './subscribers.service';
 import { SubscribersController } from './subscribers.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Subscriber, SubscriberSchema } from './schemas/subscriber.schema';
+import { Job } from 'src/jobs/schemas/job.schemas';
 
 @Module({
   controllers: [SubscribersController],
