@@ -1,21 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Permission } from 'src/permissions/schemas/permission.schema';
 
-export type CompanyDocument = HydratedDocument<Company>;
+export type SubscriberDocument = HydratedDocument<Subscriber>;
 
-@Schema({ timestamps: true }) // biến class thành 1 schema
-export class Company {
+@Schema({ timestamps: true })
+export class Subscriber {
+  @Prop()
+  email: string;
+
   @Prop()
   name: string;
 
   @Prop()
-  address: string;
-
-  @Prop()
-  description: string;
-
-  @Prop()
-  logo: string;
+  skills: string[];
 
   @Prop({ type: Object })
   createdBy: {
@@ -42,10 +40,10 @@ export class Company {
   updatedAt: Date;
 
   @Prop()
-  isDeleted: boolean;
+  isDeleted: boolean; //isDeleted
 
   @Prop()
   deletedAt: Date;
 }
 
-export const CompanySchema = SchemaFactory.createForClass(Company);
+export const SubscriberSchema = SchemaFactory.createForClass(Subscriber);

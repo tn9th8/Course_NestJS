@@ -23,7 +23,9 @@ export class ResumesController {
     return this.resumesService.create(createUserCvDto, userReq);
   }
 
-  @Post('by-user') // khong ne dung Get vi: @Get('by-user') trung voi @Get(':id')
+  // xem lish su rai CV
+  // khong ne dung Get vi: @Get('by-user') trung voi @Get(':id')
+  @Post('by-user')
   @ResponseMessage('Fetch a resumes by user')
   findByUser(@User() user: IUser) {
     return this.resumesService.findByUsers(user);

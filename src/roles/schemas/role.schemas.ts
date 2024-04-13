@@ -18,16 +18,6 @@ export class Role {
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: Permission.name })
   permissions: mongoose.Schema.Types.ObjectId[];
 
-  @Prop({ type: mongoose.Schema.Types.Array })
-  history: {
-    status: string;
-    updatedAt: Date;
-    updatedBy: {
-      _id: mongoose.Schema.Types.ObjectId;
-      email: string;
-    };
-  }[];
-
   @Prop({ type: Object })
   createdBy: {
     _id: mongoose.Schema.Types.ObjectId;

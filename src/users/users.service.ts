@@ -9,12 +9,20 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
 import { User as UserReq } from 'src/decorator/customize';
 import aqp from 'api-query-params';
+import { Role, RoleDocument } from 'src/roles/schemas/role.schemas';
+import { USER_ROLE } from 'src/databases/sample';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) // connect shema of mongo
     private userModel: SoftDeleteModel<UserDocument>, // private userModel: Model<User>, // data type
+
+    @InjectModel(Role.name)
+    private roleModel: SoftDeleteModel<RoleDocument>,
+
+    private configService: ConfigService,
   ) {}
 
   getHashPassword = (plainPassword: string) => {
@@ -59,16 +67,22 @@ export class UsersService {
 
   async register(userDto: RegisterUserDto) {
     const { name, email, password, age, gender, address } = userDto;
-    const hashPassword = this.getHashPassword(userDto.password);
-    const isExist = await this.userModel.findOne({ email });
 
     // add logic check existing mail
+    const isExist = await this.userModel.findOne({ email });
     if (isExist) {
       throw new BadRequestException(
         `Email ${email} đã tồn tại. Vui lòng sử dụng email khác`,
       );
     }
 
+    // fetch USER_ROLE role
+    const userRole = await this.roleModel.findOne({ name: USER_ROLE });
+
+    // hash password
+    const hashPassword = this.getHashPassword(password);
+
+    // do
     let userRegister = await this.userModel.create({
       name,
       email,
@@ -76,7 +90,7 @@ export class UsersService {
       age,
       gender,
       address,
-      role: 'USER',
+      role: userRole?._id,
     });
 
     return userRegister;
@@ -127,13 +141,16 @@ export class UsersService {
       .findOne({
         _id: id,
       })
-      .select('-password');
+      .select('-password')
+      .populate({ path: 'role', select: { name: 1, _id: 1 } });
     // -password :: exclude >< include
     // return this.userModel.findOne({ _id: id });
   }
 
   findOneByUsername(username: string) {
-    return this.userModel.findOne({ email: username });
+    return this.userModel
+      .findOne({ email: username })
+      .populate({ path: 'role', select: { name: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -161,11 +178,19 @@ export class UsersService {
       return 'Not found user';
     }
 
+    // logic: prevent removing admin email:
+    // nen config dong trong .env
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
+    const foundUser = await this.userModel.findById(id);
+    if (foundUser.email === adminEmail) {
+      throw new BadRequestException(`Không thể xóa email admin=${adminEmail}`);
+    }
+
     // updateOne( detetedBy ) + softDelete
     await this.userModel.updateOne(
       { _id: id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: userReq._id,
           email: userReq.email,
         },
@@ -179,6 +204,8 @@ export class UsersService {
   };
 
   findUserByToken = async (refreshToken: string) => {
-    return await this.userModel.findOne({ refreshToken });
+    return await this.userModel
+      .findOne({ refreshToken })
+      .populate({ path: 'role', select: { name: 1 } });
   };
 }

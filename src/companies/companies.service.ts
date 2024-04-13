@@ -120,7 +120,7 @@ export class CompaniesService {
     await this.companyModel.updateOne(
       { _id: id },
       {
-        detetedBy: {
+        deletedBy: {
           _id: user._id,
           email: user.email,
         },

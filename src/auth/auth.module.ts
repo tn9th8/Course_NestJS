@@ -9,15 +9,16 @@ import { JwtStrategy } from './passport/jwt.strategy';
 import { Reflector } from '@nestjs/core';
 import ms from 'ms'; // hàm
 import { AuthController } from './auth.controller';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
+  exports: [AuthService],
   imports: [
     UsersModule,
+    RolesModule,
     PassportModule,
-    // JwtModule.({
-    //   secret: jwtConstants.secret,
-    //   signOptions: { expiresIn: '60s' },
-    // }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -29,8 +30,5 @@ import { AuthController } from './auth.controller';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
-  exports: [AuthService],
 })
 export class AuthModule {}
