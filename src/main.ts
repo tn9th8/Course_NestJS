@@ -7,6 +7,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 import cookieParser from 'cookie-parser';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,8 +28,8 @@ async function bootstrap() {
   console.log('>> check path public: ', join(__dirname, '..', 'public'));
   console.log('>> check path views: ', join(__dirname, '..', 'views'));
 
-  // config middleware: auto-validation-pipe
-  app.useGlobalPipes(new ValidationPipe());
+  // config middleware: validation-pipe // whitelist: tranh update mat data
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   // config cookies: server can read and set cookies at client
   app.use(cookieParser());

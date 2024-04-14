@@ -77,21 +77,14 @@ export class SubscribersService {
     return await this.subscriberModel.findById(_id);
   }
 
-  async update(
-    _id: string,
-    updateSubscriberDto: UpdateSubscriberDto,
-    user: IUser,
-  ) {
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new BadRequestException(`Subscriber with id=${_id} not found`); // status: 200 => 400
-    }
-
+  async update(updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
     return await this.subscriberModel.updateOne(
-      { _id },
+      { email: user.email },
       {
         ...updateSubscriberDto,
         updatedBy: { _id: user._id, email: user.email },
       },
+      { upsert: true }, // vừa update nếu tồn tại, insert nếu chưa
     );
   }
 
@@ -108,5 +101,10 @@ export class SubscribersService {
       },
     );
     return this.subscriberModel.softDelete({ _id });
+  }
+
+  async getSkills(user: IUser) {
+    const { email } = user;
+    return await this.subscriberModel.findOne({ email }, { skills: 1 });
   }
 }
