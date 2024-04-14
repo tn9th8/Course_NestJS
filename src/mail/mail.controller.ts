@@ -8,7 +8,8 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
 import { Subscriber } from 'rxjs';
 import { Cron, CronExpression } from '@nestjs/schedule';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('mail')
 @Controller('mail')
 export class MailController {
   constructor(
@@ -21,7 +22,7 @@ export class MailController {
 
     @InjectModel(Job.name)
     private jobModel: SoftDeleteModel<JobDocument>,
-  ) {}
+  ) { }
 
   @Get()
   @Public()

@@ -11,22 +11,25 @@ import {
 import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './passport/local-auth.guard';
-import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto, UserLoginDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { RolesService } from 'src/roles/roles.service';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth') // route "/"
 export class AuthController {
   constructor(
     private authService: AuthService, // private usersService: UsersService,
     private roleService: RolesService,
-  ) {}
+  ) { }
 
   @Public()
   @UseGuards(LocalAuthGuard)
   @UseGuards(ThrottlerGuard)
+  @ApiBody({ type: UserLoginDto, })
   @Post('/login')
   @ResponseMessage('User login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
