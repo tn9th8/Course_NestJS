@@ -7,7 +7,6 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 import cookieParser from 'cookie-parser';
-import { ThrottlerGuard } from '@nestjs/throttler';
 import helmet from 'helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
@@ -51,8 +50,10 @@ async function bootstrap() {
     type: VersioningType.URI, // v // vì dùng URI
     defaultVersion: ['1', '2'], // v1, v1
   });
+
   // config helmet
   app.use(helmet());
+
   // config swagger
   const config = new DocumentBuilder()
     .setTitle('ITViec APIs Document')
@@ -74,9 +75,8 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
-    }
-  }
-  );
+    },
+  });
 
   await app.listen(port);
 }
