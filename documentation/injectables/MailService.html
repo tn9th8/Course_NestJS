@@ -129,18 +129,214 @@
 
 
 
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendMail" >sendMail</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
 
 
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(mailerService: MailerService, subscriberModel: <a href="../classes/Subscriber.html" target="_self">SoftDeleteModel&lt;SubscriberDocument&gt;</a>, jobModel: <a href="../classes/Job.html" target="_self">SoftDeleteModel&lt;JobDocument&gt;</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/mail/mail.service.ts:10</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>mailerService</td>
+                                                  
+                                                        <td>
+                                                                    <code>MailerService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>subscriberModel</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Subscriber.html" target="_self" >SoftDeleteModel&lt;SubscriberDocument&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>jobModel</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Job.html" target="_self" >SoftDeleteModel&lt;JobDocument&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendMail"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendMail</b></span>
+                        <a href="#sendMail"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendMail()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="21"
+                                    class="link-to-prism">src/mail/mail.service.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
 
     </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { MailerService } from &#x27;@nestjs-modules/mailer&#x27;;
+import { Injectable } from &#x27;@nestjs/common&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import { Subscriber } from &#x27;rxjs&#x27;;
+import { SoftDeleteModel } from &#x27;soft-delete-plugin-mongoose&#x27;;
+import { Job, JobDocument } from &#x27;src/jobs/schemas/job.schemas&#x27;;
+import { SubscriberDocument } from &#x27;src/subscribers/schemas/subscriber.schema&#x27;;
 
 @Injectable()
-export class MailService {}
+export class MailService {
+  constructor(
+    private readonly mailerService: MailerService,
+
+    @InjectModel(Subscriber.name)
+    private subscriberModel: SoftDeleteModel&lt;SubscriberDocument&gt;,
+
+    @InjectModel(Job.name)
+    private jobModel: SoftDeleteModel&lt;JobDocument&gt;,
+  ) {}
+
+  async sendMail() {
+    // find all subcribers
+    const subscribers &#x3D; await this.subscriberModel.find({});
+    // send mail for each subcribers
+    for (const subs of subscribers) {
+      // find job có skills in subcribers&#x27;s skills
+      const subsSkills &#x3D; subs.skills;
+      const jobWithMatchingSkills &#x3D; await this.jobModel.find({
+        skills: { $in: subsSkills },
+      });
+      if (jobWithMatchingSkills?.length) {
+        // định dạng dữ liệu job trước khi gửi
+        const jobs &#x3D; jobWithMatchingSkills.map((item: any) &#x3D;&gt; {
+          return {
+            name: item.name,
+            company: item.company.name,
+            salary:
+              &#x60;${item.salary}&#x60;.replace(/\B(?&#x3D;(\d{3})+(?!\d))/g, &#x27;,&#x27;) + &#x27; đ&#x27;,
+            skills: item.skills,
+          };
+        });
+        // gửi mail
+        await this.mailerService.sendMail({
+          to: &#x27;uyenbao4a5@gmail.com&#x27;,
+          from: &#x27;&quot;Support Team&quot; &lt;support@example.com&gt;&#x27;, // override default from
+          subject: &#x27;Welcome to Nice App! Confirm your Email&#x27;,
+          template: &#x27;new-job&#x27;, // HTML body content
+          context: {
+            receiver: subs.name,
+            jobs: jobs,
+          },
+        });
+      }
+    }
+  }
+}
 </code></pre>
     </div>
 

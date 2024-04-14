@@ -49,8 +49,10 @@ async function bootstrap() {
     type: VersioningType.URI, // v // vì dùng URI
     defaultVersion: ['1', '2'], // v1, v1
   });
+
   // config helmet
   app.use(helmet());
+
   // config swagger
   const config = new DocumentBuilder()
     .setTitle('ITViec APIs Document')

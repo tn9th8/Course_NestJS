@@ -168,6 +168,7 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#uploadFile" >uploadFile</a>
                             </li>
                         </ul>
@@ -216,8 +217,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="50"
-                                    class="link-to-prism">src/files/files.controller.ts:50</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/files/files.controller.ts:46</a></div>
                         </td>
                     </tr>
 
@@ -262,8 +263,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="55"
-                                    class="link-to-prism">src/files/files.controller.ts:55</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="51"
+                                    class="link-to-prism">src/files/files.controller.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -338,8 +339,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="65"
-                                    class="link-to-prism">src/files/files.controller.ts:65</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/files/files.controller.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -414,8 +415,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="60"
-                                    class="link-to-prism">src/files/files.controller.ts:60</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="56"
+                                    class="link-to-prism">src/files/files.controller.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -483,6 +484,7 @@
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>uploadFile</b></span>
                         <a href="#uploadFile"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -499,14 +501,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Public()<br />@Post(&#x27;upload&#x27;)<br />@ResponseMessage(&#x27;Upload Single File&#x27;)<br />@UseInterceptors(undefined)<br /></code>
+                    <code>@Public()<br />@Post(&#x27;upload&#x27;)<br />@ResponseMessage(&#x27;Upload Single File&#x27;)<br />@UseInterceptors(undefined)<br />@UseFilters(new HttpExceptionFilter())<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="33"
-                                    class="link-to-prism">src/files/files.controller.ts:33</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="37"
+                                    class="link-to-prism">src/files/files.controller.ts:37</a></div>
                         </td>
                     </tr>
 
@@ -568,6 +570,7 @@
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
+  UseFilters,
 } from &#x27;@nestjs/common&#x27;;
 import { FilesService } from &#x27;./files.service&#x27;;
 import { CreateFileDto } from &#x27;./dto/create-file.dto&#x27;;
@@ -575,6 +578,8 @@ import { UpdateFileDto } from &#x27;./dto/update-file.dto&#x27;;
 import { FileInterceptor } from &#x27;@nestjs/platform-express&#x27;;
 import { Public, ResponseMessage } from &#x27;src/decorator/customize&#x27;;
 import { ApiTags } from &#x27;@nestjs/swagger&#x27;;
+import { HttpExceptionFilter } from &#x27;src/core/http-exception.filter&#x27;;
+
 @ApiTags(&#x27;file&#x27;)
 @Controller(&#x27;files&#x27;)
 export class FilesController {
@@ -588,16 +593,9 @@ export class FilesController {
   @Post(&#x27;upload&#x27;)
   @ResponseMessage(&#x27;Upload Single File&#x27;)
   @UseInterceptors(FileInterceptor(&#x27;fileUpload&#x27;)) // key // chạy interceptor trước
+  @UseFilters(new HttpExceptionFilter())
   uploadFile(
-    @UploadedFile(
-      new ParseFilePipeBuilder() // sau đó mới chạy pipe
-        .addFileTypeValidator({
-          fileType:
-            /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|pdf|application\/pdf|docx|txt|text\/plain)$/i, // regular expression // minetype
-        })
-        .addMaxSizeValidator({ maxSize: 1024 * 1024 }) // KB &#x3D; 1 MB
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }), // error 422
-    )
+    @UploadedFile()
     file: Express.Multer.File,
   ) {
     console.log(file);

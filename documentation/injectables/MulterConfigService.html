@@ -321,7 +321,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpException, HttpStatus, Injectable } from &#x27;@nestjs/common&#x27;;
 import {
   MulterModuleOptions,
   MulterOptionsFactory,
@@ -369,17 +369,31 @@ export class MulterConfigService implements MulterOptionsFactory {
     return {
       storage: diskStorage({
         destination: (req, file, cb) &#x3D;&gt; {
-          const folder &#x3D; req?.headers?.folder_type ?? &#x27;default&#x27;; // lấy req &#x3D;&gt; header &#x3D;&gt; folder_type:value : tên folder chỉ định  | folder default
-          this.ensureExists(&#x60;public/images/${folder}&#x60;); // check ? tạo thư mục
-          cb(null, join(this.getRootPath(), &#x60;public/images/${folder}&#x60;)); // ném về callback: error | null + destination string
+          const folder &#x3D; req?.headers?.folder_type ?? &quot;default&quot;;
+          this.ensureExists(&#x60;public/images/${folder}&#x60;);
+          cb(null, join(this.getRootPath(), &#x60;public/images/${folder}&#x60;))
         },
         filename: (req, file, cb) &#x3D;&gt; {
-          let extName &#x3D; path.extname(file.originalname); // get image extension: đuôi file
-          let baseName &#x3D; path.basename(file.originalname, extName); // get image&#x27;s name: đầu file
-          let finalName &#x3D; &#x60;${baseName}-${Date.now()}${extName}&#x60;; // get final name
-          cb(null, finalName);
+          //get image extension
+          let extName &#x3D; path.extname(file.originalname);
+          //get image&#x27;s name (without extension)
+          let baseName &#x3D; path.basename(file.originalname, extName);
+          let finalName &#x3D; &#x60;${baseName}-${Date.now()}${extName}&#x60;
+          cb(null, finalName)
         },
       }),
+      fileFilter: (req, file, cb) &#x3D;&gt; {
+        const allowedFileTypes &#x3D; [&#x27;jpg&#x27;, &#x27;jpeg&#x27;, &#x27;png&#x27;, &#x27;gif&#x27;, &#x27;pdf&#x27;, &#x27;doc&#x27;, &#x27;docx&#x27;];
+        const fileExtension &#x3D; file.originalname.split(&#x27;.&#x27;).pop().toLowerCase();
+        const isValidFileType &#x3D; allowedFileTypes.includes(fileExtension);
+        if (!isValidFileType) {
+          cb(new HttpException(&#x27;Invalid file type&#x27;, HttpStatus.UNPROCESSABLE_ENTITY), null);
+        } else
+          cb(null, true);
+      },
+      limits: {
+        fileSize: 1024 * 1024 * 1 // 1MB
+      }
     };
   }
 }
