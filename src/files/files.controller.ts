@@ -10,16 +10,20 @@ import {
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Public, ResponseMessage } from 'src/decorator/customize';
+import { ApiTags } from '@nestjs/swagger';
+import { HttpExceptionFilter } from 'src/core/http-exception.filter';
 
+@ApiTags('file')
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) { }
 
   // Upload file
   // request => interceptor => pipe (validate) => response
@@ -29,16 +33,9 @@ export class FilesController {
   @Post('upload')
   @ResponseMessage('Upload Single File')
   @UseInterceptors(FileInterceptor('fileUpload')) // key // chạy interceptor trước
+  @UseFilters(new HttpExceptionFilter())
   uploadFile(
-    @UploadedFile(
-      new ParseFilePipeBuilder() // sau đó mới chạy pipe
-        .addFileTypeValidator({
-          fileType:
-            /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|pdf|application\/pdf|docx|txt|text\/plain)$/i, // regular expression // minetype
-        })
-        .addMaxSizeValidator({ maxSize: 1024 * 1024 }) // KB = 1 MB
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }), // error 422
-    )
+    @UploadedFile()
     file: Express.Multer.File,
   ) {
     console.log(file);
