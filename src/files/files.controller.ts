@@ -23,7 +23,7 @@ import { HttpExceptionFilter } from 'src/core/http-exception.filter';
 @ApiTags('file')
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) { }
+  constructor(private readonly filesService: FilesService) {}
 
   // Upload file
   // request => interceptor => pipe (validate) => response
@@ -38,8 +38,7 @@ export class FilesController {
     @UploadedFile()
     file: Express.Multer.File,
   ) {
-    console.log(file);
-    return { filename: file.filename };
+    return { filename: file.filename }; // console.log(file);
   }
 
   @Get()
