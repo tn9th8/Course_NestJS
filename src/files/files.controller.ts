@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  UseInterceptors,
+
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
@@ -17,8 +17,10 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Public, ResponseMessage } from 'src/decorator/customize';
-import { ApiTags } from '@nestjs/swagger';
+
 import { HttpExceptionFilter } from 'src/core/http-exception.filter';
+import { ApiTags } from '@nestjs/swagger';
+import { UseInterceptors } from '@nestjs/common/decorators/core/use-interceptors.decorator';
 
 @ApiTags('file')
 @Controller('files')

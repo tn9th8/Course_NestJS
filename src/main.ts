@@ -45,7 +45,8 @@ async function bootstrap() {
   });
 
   // enable URI versioning type
-  app.setGlobalPrefix('swagger');
+  // app.setGlobalPrefix('swagger');
+  app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI, // v // vì dùng URI
     defaultVersion: ['1', '2'], // v1, v1
