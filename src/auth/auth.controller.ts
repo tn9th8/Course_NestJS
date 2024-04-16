@@ -24,16 +24,16 @@ export class AuthController {
   constructor(
     private authService: AuthService, // private usersService: UsersService,
     private roleService: RolesService,
-  ) { }
+  ) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
   @UseGuards(ThrottlerGuard)
-  @ApiBody({ type: UserLoginDto, })
+  @ApiBody({ type: UserLoginDto })
   @Post('/login')
   @ResponseMessage('User login')
-  handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
-    return this.authService.login(req.user, response);
+  handleLogin(@User() user, @Res({ passthrough: true }) response: Response) {
+    return this.authService.login(user, response);
   }
 
   @Public()
