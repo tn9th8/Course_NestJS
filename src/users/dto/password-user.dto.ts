@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty } from "class-validator";
 
 export class ChangePassUserDto {
     @IsNotEmpty({ message: '_id không được để trống' })
@@ -9,4 +9,10 @@ export class ChangePassUserDto {
 
     @IsNotEmpty({ message: 'New Password không được để trống' })
     newPass: string;
+  }
+
+export class ForgotPassUserDto {
+    @IsEmail({}, { message: 'Email phải đúng định dạng' })
+    @IsNotEmpty({ message: 'Email không được để trống' })
+    email: string;
   }

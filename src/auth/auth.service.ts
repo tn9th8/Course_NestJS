@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import ms from 'ms'; // hàm
 import { Response } from 'express';
 import { RolesService } from 'src/roles/roles.service';
+import { ForgotPassUserDto } from 'src/users/dto/password-user.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService, // để lấy ra data của .env
     private rolesService: RolesService,
+    private mailService: MailService,
   ) {}
 
   // username, pass la 2 tham so la Passport nem ve
@@ -155,5 +158,28 @@ export class AuthService {
     return 'done';
     // update server: refresh token = null/ empty
     // update client:  clear refresh_token as cookies
+  }
+
+  async forgotPassword(userDto: ForgotPassUserDto) {
+    // find user by email
+    const user = await this.usersService.findOneByUsername(userDto.email);
+    // validate
+    if (!user) {
+      throw new BadRequestException(`Not found user with email=${userDto.email}`);
+    }
+    // dynamic generate new password
+    const generator = require('generate-password');
+    const newPass = generator.generate({
+	    length: 10,
+	    numbers: true
+    });
+    console.log(newPass);
+    // update new password
+    const updateUser = await this.usersService.updatePassword(user._id, newPass, user);
+    // send mail
+    if (updateUser.modifiedCount == 1) {
+      this.mailService.sendMailforNewPassword(user, newPass)
+    }
+    return updateUser;
   }
 }

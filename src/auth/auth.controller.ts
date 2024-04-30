@@ -17,6 +17,7 @@ import { IUser } from 'src/users/users.interface';
 import { RolesService } from 'src/roles/roles.service';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ForgotPassUserDto } from 'src/users/dto/password-user.dto';
 
 @ApiTags('auth')
 @Controller('auth') // route "/"
@@ -73,5 +74,13 @@ export class AuthController {
   ) {
     return this.authService.logout(user, response);
     // làm việc với cookie nên cần response
+  }
+
+  @Public()
+  @Post('forgot-password')
+  @ResponseMessage('Forgot password of user')
+  async handleForgotPassword(@Body() userDto: ForgotPassUserDto) {
+    const forgotPassUser = await this.authService.forgotPassword(userDto);
+    return forgotPassUser;
   }
 }

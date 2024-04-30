@@ -10,12 +10,15 @@ import { Reflector } from '@nestjs/core';
 import ms from 'ms'; // hàm
 import { AuthController } from './auth.controller';
 import { RolesModule } from 'src/roles/roles.module';
+import { MailService } from 'src/mail/mail.service';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
   exports: [AuthService],
   imports: [
+    MailModule,
     UsersModule,
     RolesModule,
     PassportModule,

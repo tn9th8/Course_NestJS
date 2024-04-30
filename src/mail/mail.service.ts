@@ -53,4 +53,17 @@ export class MailService {
       }
     }
   }
+
+  async sendMailforNewPassword(user: any, newPass: string) {
+    // gửi mail
+    await this.mailerService.sendMail({
+      to: `${user.email}`,
+      from: '"IT job" <support@itjob.com>', // override default from
+      subject: 'You have been issued a new password',
+      template: 'new-password', // HTML body content
+      context: { 
+        receiver: user.name, 
+        newPass: newPass },
+    });
+  }
 }

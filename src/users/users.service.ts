@@ -225,12 +225,30 @@ export class UsersService {
     //   if (isValid === false) {
     //     throw new UnauthorizedException('Password không hợp lệ');
     //   }
+    return await this.updatePassword(userDto._id, userDto.newPass, user);
+    // // hash
+    // const hashPassword = this.getHashPassword(userDto.newPass);
 
+    // const updateUser = await this.userModel.updateOne(
+    //   { _id: userDto._id },
+    //   {
+    //     password: hashPassword,
+    //     updatedBy: {
+    //       _id: user._id,
+    //       email: user.email,
+    //     },
+    //   },
+    // );
+
+    // return updateUser;
+  }
+
+  async updatePassword(_id: any, newPass: string, user: any) {
     // hash
-    const hashPassword = this.getHashPassword(userDto.newPass);
-
+    const hashPassword = this.getHashPassword(newPass);
+    // update
     const updateUser = await this.userModel.updateOne(
-      { _id: userDto._id },
+      { _id },
       {
         password: hashPassword,
         updatedBy: {
@@ -241,8 +259,5 @@ export class UsersService {
     );
 
     return updateUser;
-    
-
-    
   }
 }
