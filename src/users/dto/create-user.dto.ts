@@ -45,7 +45,6 @@ export class CreateUserDto {
   @IsMongoId({ message: 'role có định dạng là mongo object id' })
   role: mongoose.Schema.Types.ObjectId;
 
-  @IsNotEmptyObject()
   @IsObject()
   @ValidateNested()
   @Type(() => Company)
