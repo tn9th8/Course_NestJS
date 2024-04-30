@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import mongoose, { Model } from 'mongoose';
@@ -12,6 +12,7 @@ import aqp from 'api-query-params';
 import { Role, RoleDocument } from 'src/roles/schemas/role.schemas';
 import { USER_ROLE } from 'src/databases/sample';
 import { ConfigService } from '@nestjs/config';
+import { ChangePassUserDto } from './dto/password-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -208,4 +209,40 @@ export class UsersService {
       .findOne({ refreshToken })
       .populate({ path: 'role', select: { name: 1 } });
   };
+
+  async changePassword(userDto: ChangePassUserDto, user: IUser) {
+    // validate:
+    if (!mongoose.Types.ObjectId.isValid(userDto._id)) {
+      throw new BadRequestException(`Not found user with id=${userDto._id}`);
+    }
+    // find old password
+    const oldUser = await this.userModel.findById(userDto._id);
+    if(!oldUser) {
+      throw new BadRequestException(`Not found user with id=${userDto._id}`);
+    }
+    // validate password
+    // const isValid = this.isValidPassword(userDto.currentPass, oldUser.password);
+    //   if (isValid === false) {
+    //     throw new UnauthorizedException('Password không hợp lệ');
+    //   }
+
+    // hash
+    const hashPassword = this.getHashPassword(userDto.newPass);
+
+    const updateUser = await this.userModel.updateOne(
+      { _id: userDto._id },
+      {
+        password: hashPassword,
+        updatedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
+
+    return updateUser;
+    
+
+    
+  }
 }

@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IUser } from './users.interface';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { ApiTags } from '@nestjs/swagger';
+import { ChangePassUserDto } from './dto/password-user.dto';
 
 @ApiTags('users')
 @Controller('users') // /users
@@ -63,6 +64,13 @@ export class UsersController {
   @ResponseMessage('Delete a user')
   remove(@Param('id') id: string, @User() userReq: IUser) {
     return this.usersService.remove(id, userReq);
+  }
+
+  @Post('change-password') // ""
+  @ResponseMessage('Change Password of User')
+  async handleChangePassword(@Body() userDto: ChangePassUserDto, @User() user: IUser) {
+    const changePassUser = await this.usersService.changePassword(userDto, user);
+    return changePassUser;
   }
 
   // Note: với @Get(':id') và @Get('/getAll'), Nest.js sẽ chạy từ trên xuống dưới, thằng nào map sẽ enter vào
