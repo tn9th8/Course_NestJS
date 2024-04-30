@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { User } from 'src/decorator/customize';
@@ -14,7 +14,7 @@ export class JobsService {
   constructor(
     @InjectModel(Job.name) // connect shema of mongo
     private jobModel: SoftDeleteModel<JobDocument>, //private userModel: Model<Company>,
-  ) {}
+  ) { }
 
   async create(createJobDto: CreateJobDto, @User() userReq: IUser) {
     let newJob = await this.jobModel.create({
@@ -59,13 +59,16 @@ export class JobsService {
 
   async findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
+      return 'Not found job';
     }
 
     return await this.jobModel.findOne({ _id: id });
   }
 
   async update(id: string, updateJobDto: UpdateJobDto, userReq: IUser) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException(`not found job with id=${id}`); // status: 200 => 400
+    }
     return await this.jobModel.updateOne(
       { _id: id },
       {

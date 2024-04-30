@@ -13,7 +13,7 @@ export class ResumesService {
   constructor(
     @InjectModel(Resume.name) // connect shema of mongo
     private resumeModel: SoftDeleteModel<ResumeDocument>, //private userModel: Model<Company>,
-  ) {}
+  ) { }
 
   async create(createUserCvDto: CreateUserCvDto, user: IUser) {
     const { url, companyId, jobId } = createUserCvDto;
@@ -122,7 +122,7 @@ export class ResumesService {
 
   async remove(id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new BadRequestException(`not found company with id=${id}`); // status: 200 => 400
+      throw new BadRequestException(`not found Resume with id=${id}`); // status: 200 => 400
     }
 
     await this.resumeModel.updateOne(

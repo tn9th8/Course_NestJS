@@ -23,7 +23,7 @@ export class UsersService {
     private roleModel: SoftDeleteModel<RoleDocument>,
 
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   getHashPassword = (plainPassword: string) => {
     const salt = genSaltSync(10); // config
@@ -125,7 +125,7 @@ export class UsersService {
       meta: {
         current: currentPage, //trang hiện tại
         pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
+        pages: totalPages, //tổng số trang với điều knpmiện query
         total: totalItems, // tổng số phần tử (số bản ghi)
       },
       result, //kết quả query

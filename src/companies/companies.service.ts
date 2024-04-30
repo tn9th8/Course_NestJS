@@ -14,7 +14,7 @@ export class CompaniesService {
   constructor(
     @InjectModel(Company.name) // connect shema of mongo
     private companyModel: SoftDeleteModel<CompanyDocument>, //private userModel: Model<Company>,
-  ) {}
+  ) { }
 
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
@@ -87,6 +87,9 @@ export class CompaniesService {
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
     // check id hop le
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException(`not found company with id=${id}`); // status: 200 => 400
+    }
 
     return await this.companyModel.updateOne(
       { _id: id },
@@ -103,7 +106,7 @@ export class CompaniesService {
   async remove(id: string, @User() user: IUser) {
     // Cách 1 validate:
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return 'Not found user';
+      return 'Not found company';
     }
 
     // // Cách 2 validate:

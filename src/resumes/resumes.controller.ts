@@ -42,6 +42,7 @@ export class ResumesController {
     return this.resumesService.findAll(+currentPage, +limit, qs);
   }
 
+  // path param   
   @Get(':id')
   @ResponseMessage('Fetch a resume by id')
   findOne(@Param('id') id: string) {
