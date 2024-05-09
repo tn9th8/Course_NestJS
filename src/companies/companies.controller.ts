@@ -27,7 +27,7 @@ export class CompaniesController {
 
   @Get()
   @Public()
-  @ResponseMessage('Fetch list companies with panigation')
+  @ResponseMessage('Fetch list companies with pagination')
   findAll(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
@@ -59,5 +59,21 @@ export class CompaniesController {
   @Delete(':id')
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.companiesService.remove(id, user);
+  }
+
+  @Post('manager')
+  @ResponseMessage('Fetch list companies with pagination by manager')
+  findAllPiv(
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+    @User() user,
+  ) {
+    return this.companiesService.findAllByManager(
+      +currentPage,
+      +limit,
+      qs,
+      user,
+    );
   }
 }

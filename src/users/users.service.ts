@@ -123,11 +123,9 @@ export class UsersService {
     let result = null;
     if (name.includes('HR')) {
       // for HR
-      _id = user._id;
-
       result = await this.userModel
         .find(filter)
-        .find({ _id })
+        .find({ _id: user._id })
         .skip(offset)
         .limit(defaultLimit)
         .sort(sort as any)
