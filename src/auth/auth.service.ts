@@ -18,7 +18,7 @@ export class AuthService {
     private configService: ConfigService, // để lấy ra data của .env
     private rolesService: RolesService,
     private mailService: MailService,
-  ) {}
+  ) { }
 
   // username, pass la 2 tham so la Passport nem ve
   async validateUser(username: string, pass: string): Promise<any> {
@@ -170,8 +170,8 @@ export class AuthService {
     // dynamic generate new password
     const generator = require('generate-password');
     const newPass = generator.generate({
-	    length: 10,
-	    numbers: true
+      length: 10,
+      numbers: true
     });
     console.log(newPass);
     // update new password
