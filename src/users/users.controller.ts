@@ -40,11 +40,11 @@ export class UsersController {
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
     @Query() qs: string,
+    @User() user,
   ) {
-    return this.usersService.findAll(+currentPage, +limit, qs);
+    return this.usersService.findAll(+currentPage, +limit, qs, user);
   }
 
-  @Public()
   @Get(':id')
   @ResponseMessage('Fetch a user by id')
   findOne(@Param('id') id: string) {
