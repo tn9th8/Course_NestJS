@@ -15,6 +15,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import { UpdatePermissionDto } from 'src/permissions/dto/update-permission.dto';
+import { GetSkillByNameDto } from './dto/get-skill-by-name.dto';
 
 @Controller('skills')
 @ApiTags('skills')
@@ -59,5 +60,12 @@ export class SkillsController {
   @ResponseMessage('Remove a skill')
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.skillsService.remove(id, user);
+  }
+
+  @Public()
+  @Post('get-by-name')
+  @ResponseMessage('Fetch a skill by id')
+  findOneByName(@Body() dto: GetSkillByNameDto) {
+    return this.skillsService.findOneByName(dto);
   }
 }

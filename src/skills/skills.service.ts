@@ -7,6 +7,7 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from 'src/users/users.interface';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
+import { GetSkillByNameDto } from './dto/get-skill-by-name.dto';
 
 @Injectable()
 export class SkillsService {
@@ -18,7 +19,7 @@ export class SkillsService {
   async create(createSkillDto: CreateSkillDto, user: IUser) {
     const { name, description } = createSkillDto;
 
-    // check if is exist 1 permission with apiPath + method ?
+    // is exist 1 skill with this name
     const isExist = await this.skillModel.findOne({ name });
     if (isExist) {
       throw new BadRequestException(`Skill với name = ${name} đã tồn tại`);
@@ -103,5 +104,15 @@ export class SkillsService {
       },
     );
     return this.skillModel.softDelete({ _id });
+  }
+
+  async findOneByName(dto: GetSkillByNameDto) {
+    // // check if is exist 1 permission with apiPath + method ?
+    // const isExist = await this.skillModel.findOne({ name });
+    // if (isExist) {
+    //   throw new BadRequestException(`Skill với name = ${name} đã tồn tại`);
+    // }
+    const { name } = dto;
+    return await this.skillModel.findOne({ name });
   }
 }
