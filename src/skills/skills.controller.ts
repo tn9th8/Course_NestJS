@@ -1,34 +1,63 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
+import { IUser } from 'src/users/users.interface';
+import { UpdatePermissionDto } from 'src/permissions/dto/update-permission.dto';
 
 @Controller('skills')
+@ApiTags('skills')
 export class SkillsController {
   constructor(private readonly skillsService: SkillsService) {}
 
   @Post()
-  create(@Body() createSkillDto: CreateSkillDto) {
-    return this.skillsService.create(createSkillDto);
+  @ResponseMessage('Create a new skill')
+  create(@Body() createSkillDto: CreateSkillDto, @User() user: IUser) {
+    return this.skillsService.create(createSkillDto, user);
   }
 
+  @Public()
   @Get()
-  findAll() {
-    return this.skillsService.findAll();
+  @ResponseMessage('Fetch all skills with pagination')
+  findAll(
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+  ) {
+    return this.skillsService.findAll(+currentPage, +limit, qs);
   }
 
+  @Public()
   @Get(':id')
+  @ResponseMessage('Fetch a skill by id')
   findOne(@Param('id') id: string) {
-    return this.skillsService.findOne(+id);
+    return this.skillsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto) {
-    return this.skillsService.update(+id, updateSkillDto);
+  @ResponseMessage('Update a skill')
+  update(
+    @Param('id') id: string,
+    @Body() updateSkillDto: UpdateSkillDto,
+    @User() user: IUser,
+  ) {
+    return this.skillsService.update(id, updateSkillDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.skillsService.remove(+id);
+  @ResponseMessage('Remove a skill')
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.skillsService.remove(id, user);
   }
 }

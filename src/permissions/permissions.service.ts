@@ -71,7 +71,7 @@ export class PermissionsService {
   async findOne(id: string) {
     // check if is valid following a mongo object id
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new BadRequestException(`not found company with id=${id}`); // status: 200 => 400
+      throw new BadRequestException(`not found permission with id=${id}`); // status: 200 => 400
     }
 
     // check if is not exist the mongo object id ?
@@ -87,7 +87,7 @@ export class PermissionsService {
   ) {
     // check if is valid following a mongo object id
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new BadRequestException(`not found company with id=${_id}`); // status: 200 => 400
+      throw new BadRequestException(`not found permission with id=${_id}`); // status: 200 => 400
     }
 
     // check if is not exist the mongo object id ?
@@ -105,7 +105,7 @@ export class PermissionsService {
   async remove(_id: string, user: IUser) {
     // check if is valid following a mongo object id
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new BadRequestException(`not found company with id=${_id}`); // status: 200 => 400
+      throw new BadRequestException(`not found permission with id=${_id}`); // status: 200 => 400
     }
 
     // check if is not exist the mongo object id ?

@@ -70,6 +70,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (targetEndpoint.startsWith('/api/v1/auth')) {
       isExist = true;
     }
+    // temp
+    if (targetEndpoint.startsWith('/api/v1/skills')) {
+      isExist = true;
+    }
 
     // neu ko ton tai permission + ko skip permission // 200 => 403: ko có quyền
     if (!isExist && !isPublicPerminssion) {
