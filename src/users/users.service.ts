@@ -255,7 +255,10 @@ export class UsersService {
       throw new UnauthorizedException('Current Password không đúng');
     }
     // validate new password
-    if (userDto.currentPass === userDto.newPass) {
+    if (
+      userDto.currentPass === userDto.newPass ||
+      oldUser.password === userDto.newPass
+    ) {
       throw new UnauthorizedException(
         'New Password phải khác Current Password',
       );
