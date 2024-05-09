@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import mongoose, { Model } from 'mongoose';
@@ -24,7 +28,7 @@ export class UsersService {
     private roleModel: SoftDeleteModel<RoleDocument>,
 
     private configService: ConfigService,
-  ) { }
+  ) {}
 
   getHashPassword = (plainPassword: string) => {
     const salt = genSaltSync(10); // config
@@ -210,37 +214,54 @@ export class UsersService {
       .populate({ path: 'role', select: { name: 1 } });
   };
 
+  async getProfile(_id: string) {
+    const foundUser = this.userModel
+      .findById(_id)
+      .select('name')
+      .select('email')
+      .select('age')
+      .select('gender')
+      .select('address');
+    if (!foundUser) {
+      throw new BadRequestException(`Not found user with id=${_id}`);
+    }
+    return foundUser;
+  }
+
+  async updateProfile(userDto, user) {
+    let updateUser = await this.userModel.updateOne(
+      { _id: user._id },
+      {
+        ...userDto,
+        updatedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
+
+    return updateUser;
+  }
+
   async changePassword(userDto: ChangePassUserDto, user: IUser) {
-    // validate:
-    if (!mongoose.Types.ObjectId.isValid(userDto._id)) {
-      throw new BadRequestException(`Not found user with id=${userDto._id}`);
-    }
     // find old password
-    const oldUser = await this.userModel.findById(userDto._id);
-    if(!oldUser) {
-      throw new BadRequestException(`Not found user with id=${userDto._id}`);
+    const oldUser = await this.userModel.findById(user._id);
+    if (!oldUser) {
+      throw new BadRequestException(`Not found user with id=${user._id}`);
     }
-    // validate password
-    // const isValid = this.isValidPassword(userDto.currentPass, oldUser.password);
-    //   if (isValid === false) {
-    //     throw new UnauthorizedException('Password không hợp lệ');
-    //   }
-    return await this.updatePassword(userDto._id, userDto.newPass, user);
-    // // hash
-    // const hashPassword = this.getHashPassword(userDto.newPass);
-
-    // const updateUser = await this.userModel.updateOne(
-    //   { _id: userDto._id },
-    //   {
-    //     password: hashPassword,
-    //     updatedBy: {
-    //       _id: user._id,
-    //       email: user.email,
-    //     },
-    //   },
-    // );
-
-    // return updateUser;
+    // validate current password
+    const isValid = this.isValidPassword(userDto.currentPass, oldUser.password);
+    if (isValid === false) {
+      throw new UnauthorizedException('Current Password không đúng');
+    }
+    // validate new password
+    if (userDto.currentPass === userDto.newPass) {
+      throw new UnauthorizedException(
+        'New Password phải khác Current Password',
+      );
+    }
+    // do
+    return await this.updatePassword(user._id, userDto.newPass, user);
   }
 
   async updatePassword(_id: any, newPass: string, user: any) {

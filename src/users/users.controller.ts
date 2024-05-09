@@ -15,11 +15,12 @@ import { IUser } from './users.interface';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { ApiTags } from '@nestjs/swagger';
 import { ChangePassUserDto } from './dto/password-user.dto';
+import { ProfileUserDto } from './dto/profile-user.dto';
 
 @ApiTags('users')
 @Controller('users') // /users
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post() // ""
   @ResponseMessage('Create a new User')
@@ -34,7 +35,7 @@ export class UsersController {
   }
 
   @Get()
-  @ResponseMessage('Fetch user with pagnigate')
+  @ResponseMessage('Fetch user with paginate')
   findAll(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
@@ -66,10 +67,31 @@ export class UsersController {
     return this.usersService.remove(id, userReq);
   }
 
+  @Post('get-profile') // ""
+  @ResponseMessage('Get profile of User')
+  async handleGetProfile(@User() user: IUser) {
+    return this.usersService.getProfile(user._id);
+  }
+
+  @Post('update-profile') // ""
+  @ResponseMessage('Update profile of User')
+  async handleUpdateProfile(
+    @Body() userDto: ProfileUserDto,
+    @User() user: IUser,
+  ) {
+    return this.usersService.updateProfile(userDto, user);
+  }
+
   @Post('change-password') // ""
   @ResponseMessage('Change Password of User')
-  async handleChangePassword(@Body() userDto: ChangePassUserDto, @User() user: IUser) {
-    const changePassUser = await this.usersService.changePassword(userDto, user);
+  async handleChangePassword(
+    @Body() userDto: ChangePassUserDto,
+    @User() user: IUser,
+  ) {
+    const changePassUser = await this.usersService.changePassword(
+      userDto,
+      user,
+    );
     return changePassUser;
   }
 

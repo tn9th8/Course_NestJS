@@ -71,7 +71,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       isExist = true;
     }
     // temp
-    if (targetEndpoint.startsWith('/api/v1/skills')) {
+    if (
+      targetEndpoint.startsWith('/api/v1/skills') ||
+      targetEndpoint.startsWith('/api/v1/users')
+    ) {
       isExist = true;
     }
 
