@@ -17,6 +17,7 @@ import { SubscribersModule } from './subscribers/subscribers.module';
 import { MailModule } from './mail/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { SkillsModule } from './skills/skills.module';
 
 @Module({
   controllers: [AppController],
@@ -47,6 +48,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     DatabasesModule,
     SubscribersModule,
     MailModule,
+    SkillsModule,
   ],
 })
 export class AppModule {}
