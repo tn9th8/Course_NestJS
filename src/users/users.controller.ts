@@ -20,7 +20,7 @@ import { ProfileUserDto } from './dto/profile-user.dto';
 @ApiTags('users')
 @Controller('users') // /users
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post() // ""
   @ResponseMessage('Create a new User')
@@ -66,14 +66,14 @@ export class UsersController {
   remove(@Param('id') id: string, @User() userReq: IUser) {
     return this.usersService.remove(id, userReq);
   }
-
-  @Post('get-profile') // ""
+  // /profile vs /id:profile
+  @Post('profile') // ""
   @ResponseMessage('Get profile of User')
   async handleGetProfile(@User() user: IUser) {
     return this.usersService.getProfile(user._id);
   }
 
-  @Post('update-profile') // ""
+  @Patch('profile') // ""
   @ResponseMessage('Update profile of User')
   async handleUpdateProfile(
     @Body() userDto: ProfileUserDto,
@@ -82,7 +82,7 @@ export class UsersController {
     return this.usersService.updateProfile(userDto, user);
   }
 
-  @Post('change-password') // ""
+  @Patch('change-password') // ""
   @ResponseMessage('Change Password of User')
   async handleChangePassword(
     @Body() userDto: ChangePassUserDto,
