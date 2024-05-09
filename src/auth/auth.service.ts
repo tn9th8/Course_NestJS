@@ -18,7 +18,7 @@ export class AuthService {
     private configService: ConfigService, // để lấy ra data của .env
     private rolesService: RolesService,
     private mailService: MailService,
-  ) { }
+  ) {}
 
   // username, pass la 2 tham so la Passport nem ve
   async validateUser(username: string, pass: string): Promise<any> {
@@ -165,20 +165,26 @@ export class AuthService {
     const user = await this.usersService.findOneByUsername(userDto.email);
     // validate
     if (!user) {
-      throw new BadRequestException(`Not found user with email=${userDto.email}`);
+      throw new BadRequestException(
+        `Not found user with email=${userDto.email}`,
+      );
     }
     // dynamic generate new password
     const generator = require('generate-password');
     const newPass = generator.generate({
       length: 10,
-      numbers: true
+      numbers: true,
     });
     console.log(newPass);
     // update new password
-    const updateUser = await this.usersService.updatePassword(user._id, newPass, user);
+    const updateUser = await this.usersService.updatePassword(
+      user._id,
+      newPass,
+      user,
+    );
     // send mail
     if (updateUser.modifiedCount == 1) {
-      this.mailService.sendMailforNewPassword(user, newPass)
+      this.mailService.sendNewPassword(user, newPass);
     }
     return updateUser;
   }

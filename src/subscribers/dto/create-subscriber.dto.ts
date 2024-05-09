@@ -1,15 +1,15 @@
-import { IsArray, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsMongoId,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
+import mongoose from 'mongoose';
 
 export class CreateSubscriberDto {
-  @IsNotEmpty({ message: 'Email không được để trống' })
-  @IsEmail({}, { message: 'Email phải đúng định dạng' })
-  email: string;
-
-  @IsNotEmpty({ message: 'Name không được để trống' })
-  name: string;
-
   @IsNotEmpty({ message: 'skills không được để trống' })
+  @IsMongoId({ each: true, message: 'skills phải là mongo object id' })
   @IsArray({ message: 'skills có định dạng là array' })
-  @IsString({ each: true, message: 'skill có định dạng là string' })
-  skills: string[];
+  skills: mongoose.Schema.Types.ObjectId[];
 }

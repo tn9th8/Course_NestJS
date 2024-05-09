@@ -18,10 +18,11 @@ import {
 } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import { ApiTags } from '@nestjs/swagger';
+
 @ApiTags('subscribers')
 @Controller('subscribers')
 export class SubscribersController {
-  constructor(private readonly subscribersService: SubscribersService) { }
+  constructor(private readonly subscribersService: SubscribersService) {}
 
   @Post()
   @ResponseMessage('Create a new subscriber')
@@ -40,7 +41,7 @@ export class SubscribersController {
   }
 
   @Get()
-  @ResponseMessage('Fetch all subscribers with pagnigate')
+  @ResponseMessage('Fetch all subscribers with paginate')
   findAll(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
@@ -56,7 +57,6 @@ export class SubscribersController {
   }
 
   @Patch()
-  @SkipCheckPermission()
   @ResponseMessage('Update a subscriber')
   update(
     @Body() updateSubscriberDto: UpdateSubscriberDto,

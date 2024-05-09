@@ -1,10 +1,13 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Subscriber } from 'rxjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Job, JobDocument } from 'src/jobs/schemas/job.schemas';
-import { SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
+import {
+  Subscriber,
+  SubscriberDocument,
+} from 'src/subscribers/schemas/subscriber.schema';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class MailService {
@@ -16,9 +19,12 @@ export class MailService {
 
     @InjectModel(Job.name)
     private jobModel: SoftDeleteModel<JobDocument>,
+
+    @InjectModel(User.name)
+    private userModel: SoftDeleteModel<UserDocument>,
   ) {}
 
-  async sendMail() {
+  async sendJobsToSubs() {
     // find all subcribers
     const subscribers = await this.subscriberModel.find({});
     // send mail for each subcribers
@@ -39,6 +45,8 @@ export class MailService {
             skills: item.skills,
           };
         });
+        // từ sub => tìm user
+        const user = await this.userModel.findById(subs.user);
         // gửi mail
         await this.mailerService.sendMail({
           to: 'uyenbao4a5@gmail.com',
@@ -46,7 +54,7 @@ export class MailService {
           subject: 'Welcome to Nice App! Confirm your Email',
           template: 'new-job', // HTML body content
           context: {
-            receiver: subs.name,
+            receiver: user.name,
             jobs: jobs,
           },
         });
@@ -54,16 +62,17 @@ export class MailService {
     }
   }
 
-  async sendMailforNewPassword(user: any, newPass: string) {
+  async sendNewPassword(user: any, newPass: string) {
     // gửi mail
     await this.mailerService.sendMail({
       to: `${user.email}`,
       from: '"IT job" <support@itjob.com>', // override default from
       subject: 'You have been issued a new password',
       template: 'new-password', // HTML body content
-      context: { 
-        receiver: user.name, 
-        newPass: newPass },
+      context: {
+        receiver: user.name,
+        newPass: newPass,
+      },
     });
   }
 }

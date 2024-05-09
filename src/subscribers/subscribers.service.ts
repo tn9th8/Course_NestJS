@@ -7,27 +7,31 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class SubscribersService {
   constructor(
     @InjectModel(Subscriber.name)
     private subscriberModel: SoftDeleteModel<SubscriberDocument>,
+    @InjectModel(User.name)
+    private userModel: SoftDeleteModel<UserDocument>,
   ) {}
 
   async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
     // validate: phải chưa tồn tại email
     const isExist = await this.subscriberModel.findOne({
-      name: createSubscriberDto.name,
+      user: user._id,
     });
     if (isExist) {
       throw new BadRequestException(
-        `Subscriber với name=${createSubscriberDto.name} đã tồn tại`,
+        `Subscriber với user = ${user.name} đã tồn tại`,
       );
     }
 
     const newSubscriber = await this.subscriberModel.create({
-      ...createSubscriberDto,
+      user: user._id,
+      skills: createSubscriberDto.skills,
       createdBy: { _id: user._id, email: user.email },
     });
 
@@ -73,13 +77,15 @@ export class SubscribersService {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw new BadRequestException(`Subscriber with id=${_id} not found`); // status: 200 => 400
     }
-    // do
-    return await this.subscriberModel.findById(_id);
+    return await this.subscriberModel
+      .findById(_id)
+      .populate({ path: 'user', select: { name: 1, email: 1 } })
+      .populate({ path: 'skills', select: { name: 1, description: 1 } });
   }
 
   async update(updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
     return await this.subscriberModel.updateOne(
-      { email: user.email },
+      { user: user._id },
       {
         ...updateSubscriberDto,
         updatedBy: { _id: user._id, email: user.email },

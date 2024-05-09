@@ -1,19 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Permission } from 'src/permissions/schemas/permission.schema';
+import { Skill } from 'src/skills/schemas/skill.schema';
+import { User } from 'src/users/schemas/user.schema';
 
 export type SubscriberDocument = HydratedDocument<Subscriber>;
 
 @Schema({ timestamps: true })
 export class Subscriber {
-  @Prop()
-  email: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  user: mongoose.Schema.Types.ObjectId;
 
-  @Prop()
-  name: string;
-
-  @Prop()
-  skills: string[];
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: Skill.name })
+  skills: mongoose.Schema.Types.ObjectId[];
 
   @Prop({ type: Object })
   createdBy: {

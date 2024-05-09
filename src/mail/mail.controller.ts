@@ -19,6 +19,6 @@ export class MailController {
   @ResponseMessage('Send a new-job email')
   @Cron('0 0 7 * * 0') // Every Sun, 7h:0m:0s // @Cron('10 * * * * *')
   async handleSendMail() {
-    this.mailService.sendMail();
+    this.mailService.sendJobsToSubs();
   }
 }
