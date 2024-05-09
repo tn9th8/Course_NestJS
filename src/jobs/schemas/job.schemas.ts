@@ -25,13 +25,13 @@ export class Job {
   salary: number;
 
   @Prop()
-  quantity: number;
+  quantity: number; // quantity of recruits, opening
 
   @Prop()
   level: string;
 
   @Prop()
-  description: string; //html
+  description: string; // html
 
   @Prop()
   startDate: Date;
