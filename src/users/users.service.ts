@@ -101,7 +101,7 @@ export class UsersService {
     return userRegister;
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
+  async findAll(currentPage: number, limit: number, qs: string, user: IUser) {
     const { filter, sort, population } = aqp(qs);
     delete filter.current;
     delete filter.pageSize;
@@ -117,14 +117,34 @@ export class UsersService {
     const totalItems = (await this.userModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const result = await this.userModel
-      .find(filter)
-      .skip(offset)
-      .limit(defaultLimit)
-      .sort(sort as any)
-      .select('-password')
-      .populate(population)
-      .exec();
+    // xử lý admin vs HR
+    const { name } = user.role;
+    let _id = null;
+    let result = null;
+    if (name.includes('HR')) {
+      // for HR
+      _id = user._id;
+
+      result = await this.userModel
+        .find(filter)
+        .find({ _id })
+        .skip(offset)
+        .limit(defaultLimit)
+        .sort(sort as any)
+        .select('-password')
+        .populate(population)
+        .exec();
+    } else {
+      // for admin
+      result = await this.userModel
+        .find(filter)
+        .skip(offset)
+        .limit(defaultLimit)
+        .sort(sort as any)
+        .select('-password')
+        .populate(population)
+        .exec();
+    }
 
     return {
       meta: {
