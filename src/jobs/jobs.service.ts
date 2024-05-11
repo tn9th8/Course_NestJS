@@ -100,13 +100,32 @@ export class JobsService {
   }
 
   async countJobsHiring() {
-    const date: Date = new Date();
+    const today: Date = new Date();
 
     const result = await this.jobModel
-      .find({ endDate: { $gte: date } })
+      .find({ endDate: { $gte: today } })
       .select({ endDate: 1 })
       .exec();
 
-    return { JobsToday: (await result).length };
+    return { JobsHiring: (await result).length };
+  }
+
+  async countJobsToday() {
+    const today: Date = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    const result = await this.jobModel
+      .find({ startDate: { $gte: today } })
+      .select({ startDate: 1 })
+      .exec();
+
+    return {
+      JobsToday: (await result).length,
+      Today: today,
+      result,
+    };
   }
 }

@@ -18,7 +18,9 @@ export class DashboardService {
     return await this.jobService.countJobsHiring();
   }
 
-  async countJobsToday() {}
+  async countJobsToday() {
+    return await this.jobService.countJobsToday();
+  }
 
   create(createDashboardDto: CreateDashboardDto) {
     return 'This action adds a new dashboard';
