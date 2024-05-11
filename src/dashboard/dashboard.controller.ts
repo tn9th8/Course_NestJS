@@ -24,8 +24,8 @@ export class DashboardController {
 
   @Public()
   @Get('job/today')
-  countJobsTody() {
-    return this.dashboardService.countJobsTody();
+  countJobsToday() {
+    return this.dashboardService.countJobsToday();
   }
 
   @Post()
