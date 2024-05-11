@@ -14,7 +14,7 @@ export class JobsService {
   constructor(
     @InjectModel(Job.name) // connect shema of mongo
     private jobModel: SoftDeleteModel<JobDocument>, //private userModel: Model<Company>,
-  ) { }
+  ) {}
 
   async create(createJobDto: CreateJobDto, @User() userReq: IUser) {
     let newJob = await this.jobModel.create({
@@ -97,5 +97,16 @@ export class JobsService {
       },
     );
     return this.jobModel.softDelete({ _id });
+  }
+
+  async countJobsTody() {
+    const date: Date = new Date();
+
+    const result = await this.jobModel
+      .find({ endDate: { $gte: date } })
+      .select({ endDate: 1 })
+      .exec();
+
+    return { JobsToday: (await result).length };
   }
 }

@@ -15,11 +15,7 @@ export class SubscribersService {
   constructor(
     @InjectModel(Subscriber.name)
     private subscriberModel: SoftDeleteModel<SubscriberDocument>,
-    @InjectModel(User.name)
-    private userModel: SoftDeleteModel<UserDocument>,
-
-    private userService: UsersService,
-  ) { }
+  ) {}
 
   async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
     // validate: phải chưa tồn tại email

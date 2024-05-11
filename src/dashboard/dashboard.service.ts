@@ -3,6 +3,9 @@ import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 import { JobsService } from 'src/jobs/jobs.service';
 import { SkillsService } from 'src/skills/skills.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Job } from 'src/jobs/schemas/job.schemas';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class DashboardService {
@@ -13,9 +16,8 @@ export class DashboardService {
 
   countJobsHiring() {}
 
-  countJobsTody() {
-    let date: Date = new Date();
-    console.log('Date = ' + date);
+  async countJobsTody() {
+    return await this.jobService.countJobsTody();
   }
 
   create(createDashboardDto: CreateDashboardDto) {

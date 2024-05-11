@@ -14,7 +14,7 @@ export class SkillsService {
   constructor(
     @InjectModel(Skill.name)
     private skillModel: SoftDeleteModel<SkillDocument>,
-  ) { }
+  ) {}
 
   async create(createSkillDto: CreateSkillDto, user: IUser) {
     const { name, description } = createSkillDto;
@@ -116,12 +116,13 @@ export class SkillsService {
     return await this.skillModel.findOne({ name });
   }
 
-  async findAllFollowingName() {
-    const result = await this.skillModel.find().exec();
-    const handleResult = result.map((skill) => {
-      return { name: skill.name, value: skill._id }
-    })
-
-    return handleResult;
+  async findAllSelectName() {
+    const result = await this.skillModel
+      .find()
+      .select({ _id: 1, name: 1 })
+      .exec();
+    return result.map((skill) => {
+      return { name: skill.name, value: skill._id };
+    });
   }
 }
