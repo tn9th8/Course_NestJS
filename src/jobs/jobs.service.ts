@@ -122,10 +122,6 @@ export class JobsService {
       .select({ startDate: 1 })
       .exec();
 
-    return {
-      JobsToday: (await result).length,
-      Today: today,
-      result,
-    };
+    return { JobsToday: (await result).length };
   }
 }
