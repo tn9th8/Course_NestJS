@@ -19,7 +19,7 @@ export class SubscribersService {
     private userModel: SoftDeleteModel<UserDocument>,
 
     private userService: UsersService,
-  ) {}
+  ) { }
 
   async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
     // validate: phải chưa tồn tại email
@@ -87,11 +87,11 @@ export class SubscribersService {
             deletedBy: 1,
           },
         },
-        { $sort: sort as any },
+        // { $sort: sort as any },
       ])
       .skip(offset)
       .limit(defaultLimit)
-      // .sort(sort as any)
+      .sort(sort as any)
 
       // .select(projection as any)
       // .find(filter)
