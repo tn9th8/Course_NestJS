@@ -70,4 +70,10 @@ export class SubscribersController {
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.subscribersService.remove(id, user);
   }
+
+  @Post('user')
+  @ResponseMessage('Fetch a subscriber by user')
+  findOneByUser(@User() user: IUser) {
+    return this.subscribersService.findOneByUser(user);
+  }
 }
