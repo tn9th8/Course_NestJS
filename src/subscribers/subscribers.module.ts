@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Subscriber, SubscriberSchema } from './schemas/subscriber.schema';
 import { Job } from 'src/jobs/schemas/job.schemas';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   controllers: [SubscribersController],
@@ -14,6 +15,7 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
       { name: Subscriber.name, schema: SubscriberSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    UsersModule,
   ],
 })
 export class SubscribersModule {}

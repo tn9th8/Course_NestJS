@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
 import { User, UserDocument } from 'src/users/schemas/user.schema';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class SubscribersService {
@@ -16,6 +17,8 @@ export class SubscribersService {
     private subscriberModel: SoftDeleteModel<SubscriberDocument>,
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
+
+    private userService: UsersService,
   ) {}
 
   async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
@@ -52,14 +55,31 @@ export class SubscribersService {
     const totalItems = (await this.subscriberModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
+    const user = await this.userService.findAllIsSubscriber(filter);
+    console.log(user);
+
     const result = await this.subscriberModel
-      .find(filter)
+      .aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            pipeline: [{ $project: { name: 1, email: 1 } }],
+            as: 'user',
+          },
+        },
+        { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
+      ])
+      //.find({})
       .skip(offset)
       .limit(defaultLimit)
-      .sort(sort as any)
-      .populate(population)
-      .select(projection as any)
+      // .sort(sort as any)
+      // .populate(population)
+      // .select(projection as any)
+      // .find(filter)
       .exec();
+    console.log(result);
 
     return {
       meta: {

@@ -302,4 +302,9 @@ export class UsersService {
 
     return updateUser;
   }
+
+  async findAllIsSubscriber(filter: any) {
+    // for admin
+    return await this.userModel.find(filter).select('_id').exec();
+  }
 }
