@@ -10,5 +10,6 @@ import { Skill, SkillSchema } from './schemas/skill.schema';
   ],
   controllers: [SkillsController],
   providers: [SkillsService],
+  exports: [SkillsService],
 })
 export class SkillsModule {}

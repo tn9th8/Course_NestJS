@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
+import { JobsService } from 'src/jobs/jobs.service';
+import { SkillsService } from 'src/skills/skills.service';
 
 @Injectable()
 export class DashboardService {
+  constructor(
+    private jobService: JobsService,
+    private skillService: SkillsService,
+  ) {}
+
   countJobsHiring() {}
 
-  countJobsTody() {}
+  countJobsTody() {
+    let date: Date = new Date();
+    console.log('Date = ' + date);
+  }
 
   create(createDashboardDto: CreateDashboardDto) {
     return 'This action adds a new dashboard';

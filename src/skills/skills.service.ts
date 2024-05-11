@@ -115,4 +115,8 @@ export class SkillsService {
     const { name } = dto;
     return await this.skillModel.findOne({ name });
   }
+
+  async findAllFollowingIdName() {
+    return await this.skillModel.find().select({ _id: 1, name: 1 }).exec();
+  }
 }

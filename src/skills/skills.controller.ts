@@ -68,4 +68,11 @@ export class SkillsController {
   findOneByName(@Body() dto: GetSkillByNameDto) {
     return this.skillsService.findOneByName(dto);
   }
+
+  @Public()
+  @Post('list')
+  @ResponseMessage('Fetch all skills following id-name')
+  findAllFollowingIdName() {
+    return this.skillsService.findAllFollowingIdName();
+  }
 }

@@ -25,9 +25,7 @@ export class DashboardController {
   @Public()
   @Get('job/today')
   countJobsTody() {
-    let date: Date = new Date();
-    console.log('Date = ' + date);
-    // return this.dashboardService.countJobsTody();
+    return this.dashboardService.countJobsTody();
   }
 
   @Post()
