@@ -52,12 +52,6 @@ export class SubscribersService {
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
-    const totalItems = (await this.subscriberModel.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
-
-    const user = await this.userService.findAllIsSubscriber(filter);
-    console.log(user);
-
     const result = await this.subscriberModel
       .aggregate([
         {
@@ -65,21 +59,46 @@ export class SubscribersService {
             from: 'users',
             localField: 'user',
             foreignField: '_id',
-            pipeline: [{ $project: { name: 1, email: 1 } }],
+            pipeline: [{ $project: { _id: 1, name: 1, email: 1 } }],
             as: 'user',
           },
         },
+        {
+          $lookup: {
+            from: 'skills',
+            localField: 'skills',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1 } }],
+            as: 'skills',
+          },
+        },
         { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
+        {
+          $project: {
+            _id: 1,
+            user: { $arrayElemAt: ['$user', 0] },
+            skills: 1,
+            createdBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            deletedBy: 1,
+          },
+        },
+        { $sort: sort as any },
       ])
-      //.find({})
       .skip(offset)
       .limit(defaultLimit)
       // .sort(sort as any)
-      // .populate(population)
+
       // .select(projection as any)
       // .find(filter)
       .exec();
-    console.log(result);
+    // console.log(result);
+    const totalItems = result.length;
+    const totalPages = Math.ceil(totalItems / defaultLimit);
 
     return {
       meta: {
