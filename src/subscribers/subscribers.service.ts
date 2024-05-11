@@ -51,7 +51,6 @@ export class SubscribersService {
     if (!sort) {
       sort = { updatedAt: -1 };
     }
-
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
@@ -95,7 +94,7 @@ export class SubscribersService {
       .limit(defaultLimit)
       .sort(sort as any)
       .exec();
-    // console.log(result);
+
     const totalItems = result.length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
@@ -150,5 +149,48 @@ export class SubscribersService {
   async getSkills(user: IUser) {
     const { email } = user;
     return await this.subscriberModel.findOne({ email }, { skills: 1 });
+  }
+
+  async findOneByUser(user: IUser) {
+    const mongoose = require('mongoose'); // signature
+    const filter = { 'user._id': new mongoose.Types.ObjectId(user._id) }; // convert to object id
+
+    return await this.subscriberModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, email: 1 } }],
+            as: 'user',
+          },
+        },
+        {
+          $lookup: {
+            from: 'skills',
+            localField: 'skills',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1 } }],
+            as: 'skills',
+          },
+        },
+        { $match: filter },
+        {
+          $project: {
+            _id: 1,
+            user: { $arrayElemAt: ['$user', 0] },
+            skills: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      .exec();
   }
 }
