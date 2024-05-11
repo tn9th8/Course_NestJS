@@ -10,19 +10,24 @@ import {
 import { DashboardService } from './dashboard.service';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
+import { Public } from 'src/decorator/customize';
 
 @Controller('dashboard')
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
+  @Public()
   @Get('job/hiring')
   countJobsHiring() {
     return this.dashboardService.countJobsHiring();
   }
 
+  @Public()
   @Get('job/today')
   countJobsTody() {
-    return this.dashboardService.countJobsTody();
+    let date: Date = new Date();
+    console.log('Date = ' + date);
+    // return this.dashboardService.countJobsTody();
   }
 
   @Post()

@@ -75,6 +75,7 @@ export class SubscribersService {
           },
         },
         { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
+        { $match: { isDeleted: false } },
         {
           $project: {
             _id: 1,
@@ -153,7 +154,7 @@ export class SubscribersService {
 
   async findOneByUser(user: IUser) {
     const mongoose = require('mongoose'); // signature
-    const filter = { 'user._id': new mongoose.Types.ObjectId(user._id) }; // convert to object id
+    const filter = { 'user._id': new mongoose.Types.ObjectId(user._id) }; // convert string to object id
 
     return await this.subscriberModel
       .aggregate([
