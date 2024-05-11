@@ -14,11 +14,11 @@ export class DashboardService {
     private skillService: SkillsService,
   ) {}
 
-  countJobsHiring() {}
-
-  async countJobsTody() {
-    return await this.jobService.countJobsTody();
+  async countJobsHiring() {
+    return await this.jobService.countJobsHiring();
   }
+
+  async countJobsToday() {}
 
   create(createDashboardDto: CreateDashboardDto) {
     return 'This action adds a new dashboard';

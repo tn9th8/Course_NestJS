@@ -99,7 +99,7 @@ export class JobsService {
     return this.jobModel.softDelete({ _id });
   }
 
-  async countJobsTody() {
+  async countJobsHiring() {
     const date: Date = new Date();
 
     const result = await this.jobModel
