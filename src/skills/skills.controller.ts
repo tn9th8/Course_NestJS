@@ -20,7 +20,7 @@ import { GetSkillByNameDto } from './dto/get-skill-by-name.dto';
 @Controller('skills')
 @ApiTags('skills')
 export class SkillsController {
-  constructor(private readonly skillsService: SkillsService) {}
+  constructor(private readonly skillsService: SkillsService) { }
 
   @Post()
   @ResponseMessage('Create a new skill')
@@ -72,7 +72,7 @@ export class SkillsController {
   @Public()
   @Post('list')
   @ResponseMessage('Fetch all skills following id-name')
-  findAllFollowingIdName() {
-    return this.skillsService.findAllFollowingIdName();
+  findAllFollowingName() {
+    return this.skillsService.findAllFollowingName();
   }
 }
