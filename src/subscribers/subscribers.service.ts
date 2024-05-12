@@ -150,27 +150,11 @@ export class SubscribersService {
 
   async findOneByUser(user: IUser) {
     const mongoose = require('mongoose'); // signature
-    const filter = { user: new mongoose.Types.ObjectId(user._id) }; // convert string to object id
+    const filter = { 'user._id': new mongoose.Types.ObjectId(user._id) }; // convert string to object id
 
     return await this.subscriberModel
-      .aggregate([
-        {
-          $lookup: {
-            from: 'skills',
-            localField: 'skills',
-            foreignField: '_id',
-            pipeline: [{ $project: { _id: 1, name: 1 } }],
-            as: 'skills',
-          },
-        },
-        { $match: filter },
-        {
-          $project: {
-            _id: 1,
-            skills: 1,
-          },
-        },
-      ])
-      .exec();
+      .findOne({ user: user._id })
+      .populate({ path: 'skills', select: { _id: 1, name: 1 } })
+      .select({ _id: 1, skills: 1 });
   }
 }

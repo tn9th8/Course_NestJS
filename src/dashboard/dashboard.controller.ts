@@ -22,6 +22,7 @@ export class DashboardController {
     return this.dashboardService.countJobs();
   }
 
+  @Public()
   @Get('skills')
   @ResponseMessage('Top 5 Skills')
   findTop5Skills() {

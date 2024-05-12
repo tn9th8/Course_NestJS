@@ -189,9 +189,9 @@ export class JobsService {
     };
   }
 
-  async findJobsMatchingSkills(skills: any) {
+  async findJobsMatchingSkill(skill: any) {
     const jobMatchingSkills = await this.jobModel.find({
-      skills: { $in: skills },
+      skills: { $in: skill },
     });
     return jobMatchingSkills.length;
   }

@@ -130,16 +130,16 @@ export class SkillsService {
   }
 
   async findTop5Skills() {
-    let skills = await this.skillModel.find({});
-    skills.map((item) => {
+    const skills = await this.skillModel.find({}).select({ _id: 1, name: 1 });
+    let newSkills = skills.map((item) => {
       return { _id: item._id, name: item.name, number: 0 };
     });
 
-    for (const skill of skills) {
-      const number = await this.jobsService.findJobsMatchingSkills(skills);
-      console.log(number);
+    for (const skill of newSkills) {
+      const number = await this.jobsService.findJobsMatchingSkill(skill);
+      newSkills['number'] = number;
     }
 
-    return {};
+    return skills;
   }
 }
