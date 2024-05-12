@@ -188,4 +188,11 @@ export class JobsService {
       today: today,
     };
   }
+
+  async findJobsMatchingSkills(skills: any) {
+    const jobMatchingSkills = await this.jobModel.find({
+      skills: { $in: skills },
+    });
+    return jobMatchingSkills.length;
+  }
 }

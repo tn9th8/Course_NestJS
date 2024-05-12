@@ -8,12 +8,15 @@ import { IUser } from 'src/users/users.interface';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
 import { GetSkillByNameDto } from './dto/get-skill-by-name.dto';
+import { JobsService } from 'src/jobs/jobs.service';
 
 @Injectable()
 export class SkillsService {
   constructor(
     @InjectModel(Skill.name)
     private skillModel: SoftDeleteModel<SkillDocument>,
+
+    private jobsService: JobsService,
   ) {}
 
   async create(createSkillDto: CreateSkillDto, user: IUser) {
@@ -133,6 +136,8 @@ export class SkillsService {
     });
 
     for (const skill of skills) {
+      const number = await this.jobsService.findJobsMatchingSkills(skills);
+      console.log(number);
     }
 
     return {};

@@ -29,7 +29,7 @@ export class DashboardService {
 
   async findTop5Skills() {
     const skills = await this.skillsService.findTop5Skills();
-    return {};
+    return skills;
   }
 
   create(createDashboardDto: CreateDashboardDto) {

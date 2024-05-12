@@ -29,7 +29,7 @@ export class MailService {
     const subscribers = await this.subscriberModel.find({});
     // send mail for each subcribers
     for (const subs of subscribers) {
-      // find job có skills in subcribers's skills
+      // find job có chứa subcribers's skills
       const subsSkills = subs.skills;
       const jobWithMatchingSkills = await this.jobModel.find({
         skills: { $in: subsSkills },
