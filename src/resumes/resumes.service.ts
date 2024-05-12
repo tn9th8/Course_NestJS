@@ -143,8 +143,8 @@ export class ResumesService {
     today = new Date(today.getTime() + 24 * 60 * 60 * 1000); // cộng thêm 1 ngày
 
     let startMonth: Date = new Date(today);
-    startMonth.setDate(1);
-    startMonth = new Date(startMonth.getTime() + 24 * 60 * 60 * 1000);
+    startMonth.setDate(1); // set date = 1 và bị trừ 1 ngày
+    startMonth = new Date(startMonth.getTime() + 24 * 60 * 60 * 1000); // cộng thêm 1 ngày
 
     let startNextMonth: Date = new Date(startMonth);
     startNextMonth.setMonth(startNextMonth.getMonth() + 1); // set month + 1 thành ngày đầu tháng sau

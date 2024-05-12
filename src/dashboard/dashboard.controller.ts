@@ -16,21 +16,18 @@ import { Public, ResponseMessage } from 'src/decorator/customize';
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
-  @Public()
   @Get('job/hiring')
   @ResponseMessage('count Jobs Hiring')
   countJobsHiring() {
     return this.dashboardService.countJobsHiring();
   }
 
-  @Public()
   @Get('job/today')
   @ResponseMessage('count Jobs Today')
   countJobsToday() {
     return this.dashboardService.countJobsToday();
   }
 
-  @Public()
   @Get('resume/month')
   @ResponseMessage('count Resumes Month')
   countResumesMonth() {
