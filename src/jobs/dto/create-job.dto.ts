@@ -17,7 +17,7 @@ import mongoose from 'mongoose';
 
 // Data transfer object // class = {}
 export class CreateJobDto {
-  @IsNotEmpty({ message: 'Name không được để trống' })
+  @IsNotEmpty({ message: 'name không được để trống' })
   name: string;
 
   @IsNotEmpty({ message: 'skills không được để trống' })
@@ -50,17 +50,15 @@ export class CreateJobDto {
   @IsNotEmpty({ message: 'Description không được để trống' })
   description: string; //html
 
-  @IsNotEmpty({ message: 'Started Date không được để trống' })
+  @IsNotEmpty({ message: 'startDate không được để trống' })
   @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'endDate có định dạng là Date' })
+  @IsDate({ message: 'startDate có định dạng là Date' })
   @MinDate(new Date(), {
     message: 'startDate không được nhỏ hơn ngày hiện tại',
   })
   startDate: Date;
 
-  date: Date = new Date();
-
-  @IsNotEmpty({ message: 'Ended Date không được để trống' })
+  @IsNotEmpty({ message: 'endDate không được để trống' })
   @Transform(({ value }) => new Date(value))
   @IsDate({ message: 'endDate có định dạng là Date' })
   @MinDate(new Date(), {

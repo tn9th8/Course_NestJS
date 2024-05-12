@@ -40,6 +40,8 @@ export class Job {
   @Prop()
   isActive: boolean;
 
+  //
+
   @Prop({ type: Object })
   createdBy: {
     _id: mongoose.Schema.Types.ObjectId;

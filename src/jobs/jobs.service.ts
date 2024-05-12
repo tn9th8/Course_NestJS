@@ -28,23 +28,75 @@ export class JobsService {
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
-    const { filter, sort, population } = aqp(qs);
+    let { filter, sort } = aqp(qs);
     delete filter.current;
     delete filter.pageSize;
+    if (!sort) {
+      sort = { updatedAt: -1 };
+    }
 
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
-    const totalItems = (await this.jobModel.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
-
     const result = await this.jobModel
-      .find(filter)
+      .aggregate([
+        {
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        {
+          $lookup: {
+            from: 'skills',
+            localField: 'skills',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1 } }],
+            as: 'skills',
+          },
+        },
+        { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
+        { $match: { isDeleted: false } },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
       .skip(offset)
       .limit(defaultLimit)
       .sort(sort as any)
-      .populate(population)
       .exec();
+
+    // .find(filter)
+    // .skip(offset)
+    // .limit(defaultLimit)
+    // .sort(sort as any)
+    // .populate(population)
+    // .exec();
+
+    const totalItems = result.length;
+    const totalPages = Math.ceil(totalItems / defaultLimit);
 
     return {
       meta: {
