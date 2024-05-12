@@ -193,6 +193,7 @@ export class JobsService {
     const jobMatchingSkills = await this.jobModel.find({
       skills: { $in: skill },
     });
+    console.log(jobMatchingSkills.length);
     return jobMatchingSkills.length;
   }
 }
