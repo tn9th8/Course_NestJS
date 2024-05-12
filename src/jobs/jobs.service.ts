@@ -112,23 +112,20 @@ export class JobsService {
   }
 
   async countJobsToday() {
-    const yesterday: Date = new Date();
-    yesterday.setHours(0, 0, 0, 0);
+    let today: Date = new Date();
+    today.setHours(0, 0, 0, 0); // bị trừ 1 ngày
+    const todayTimestamp = today.getTime() + 24 * 60 * 60 * 1000; // cộng thêm 1 ngày
+    today = new Date(todayTimestamp);
 
-    const todayTimestamp = yesterday.getTime() + 24 * 60 * 60 * 1000;
     const tomorrowTimestamp = todayTimestamp + 24 * 60 * 60 * 1000;
-    const today: Date = new Date(todayTimestamp);
     const tomorrow: Date = new Date(tomorrowTimestamp);
 
-    // query: startDate >= today & startDate <= tomorrow
+    // query: startDate >= today & startDate < tomorrow
     const result = await this.jobModel
       .find({ startDate: { $gte: today, $lt: tomorrow } })
       .select({ startDate: 1 })
       .exec();
 
-    return {
-      JobsToday: (await result).length,
-      Today: today,
-    };
+    return { JobsToday: (await result).length, Today: today };
   }
 }

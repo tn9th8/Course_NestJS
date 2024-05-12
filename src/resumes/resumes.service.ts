@@ -138,25 +138,26 @@ export class ResumesService {
   }
 
   async countResumesMonth() {
-    const yesterday: Date = new Date();
-    yesterday.setHours(0, 0, 0, 0);
+    let today: Date = new Date();
+    today.setHours(0, 0, 0, 0); // set h-m-s-ms = 0 và bị trừ 1 ngày
+    today = new Date(today.getTime() + 24 * 60 * 60 * 1000); // cộng thêm 1 ngày
 
-    const todayTimestamp = yesterday.getTime() + 24 * 60 * 60 * 1000;
-    const tomorrowTimestamp = todayTimestamp + 24 * 60 * 60 * 1000;
-    const today: Date = new Date(todayTimestamp);
-    const tomorrow: Date = new Date(tomorrowTimestamp);
+    let startMonth: Date = new Date(today);
+    startMonth.setDate(1);
+    startMonth = new Date(startMonth.getTime() + 24 * 60 * 60 * 1000);
 
-    // query: startDate >= today & startDate <= tomorrow
+    let startNextMonth: Date = new Date(startMonth);
+    startNextMonth.setMonth(startNextMonth.getMonth() + 1); // set month + 1 thành ngày đầu tháng sau
+
+    // query: createdAt >= startMonth & startDate < startNextMonth
     const result = await this.resumeModel
-      .find({ createdAt: { $gte: today, $lt: tomorrow } })
-      .select({ startDate: 1 })
+      .find({ createdAt: { $gte: startMonth, $lt: startNextMonth } })
+      .select({ createdAt: 1 })
       .exec();
 
     return {
-      JobsToday: (await result).length,
+      ResumesMonth: (await result).length,
       Today: today,
-      Tomorrow: tomorrow,
-      result,
     };
   }
 }
