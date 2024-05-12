@@ -129,8 +129,6 @@ export class JobsService {
     return {
       JobsToday: (await result).length,
       Today: today,
-      Tomorrow: tomorrow,
-      result,
     };
   }
 }

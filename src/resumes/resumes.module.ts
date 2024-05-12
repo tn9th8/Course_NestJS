@@ -10,5 +10,6 @@ import { Resume, ResumeSchema } from './schemas/resume.schemas';
   imports: [
     MongooseModule.forFeature([{ name: Resume.name, schema: ResumeSchema }]),
   ],
+  exports: [ResumesService],
 })
 export class ResumesModule {}

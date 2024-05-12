@@ -6,20 +6,26 @@ import { SkillsService } from 'src/skills/skills.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job } from 'src/jobs/schemas/job.schemas';
 import { Model } from 'mongoose';
+import { ResumesService } from 'src/resumes/resumes.service';
 
 @Injectable()
 export class DashboardService {
   constructor(
-    private jobService: JobsService,
-    private skillService: SkillsService,
+    private jobsService: JobsService,
+    private skillsService: SkillsService,
+    private resumesService: ResumesService,
   ) {}
 
   async countJobsHiring() {
-    return await this.jobService.countJobsHiring();
+    return await this.jobsService.countJobsHiring();
   }
 
   async countJobsToday() {
-    return await this.jobService.countJobsToday();
+    return await this.jobsService.countJobsToday();
+  }
+
+  async countResumesMonth() {
+    return await this.resumesService.countResumesMonth();
   }
 
   create(createDashboardDto: CreateDashboardDto) {

@@ -10,7 +10,7 @@ import {
 import { DashboardService } from './dashboard.service';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -18,14 +18,23 @@ export class DashboardController {
 
   @Public()
   @Get('job/hiring')
+  @ResponseMessage('count Jobs Hiring')
   countJobsHiring() {
     return this.dashboardService.countJobsHiring();
   }
 
   @Public()
   @Get('job/today')
+  @ResponseMessage('count Jobs Today')
   countJobsToday() {
     return this.dashboardService.countJobsToday();
+  }
+
+  @Public()
+  @Get('resume/month')
+  @ResponseMessage('count Resumes Month')
+  countResumesMonth() {
+    return this.dashboardService.countResumesMonth();
   }
 
   @Post()
