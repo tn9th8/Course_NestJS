@@ -27,16 +27,9 @@ export class DashboardService {
     };
   }
 
-  async countJobsHiring() {
-    return await this.jobsService.countJobsHiring();
-  }
-
-  async countJobsToday() {
-    return await this.jobsService.countJobsToday();
-  }
-
-  async countResumesMonth() {
-    return await this.resumesService.countResumesMonth();
+  async findTop5Skills() {
+    const skills = await this.skillsService.findTop5Skills();
+    return {};
   }
 
   create(createDashboardDto: CreateDashboardDto) {

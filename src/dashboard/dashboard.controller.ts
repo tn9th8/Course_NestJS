@@ -17,27 +17,15 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get('jobs')
-  @ResponseMessage('count Jobs')
+  @ResponseMessage('Count Jobs')
   countJobs() {
     return this.dashboardService.countJobs();
   }
 
-  @Get('job/hiring')
-  @ResponseMessage('count Jobs Hiring')
-  countJobsHiring() {
-    return this.dashboardService.countJobsHiring();
-  }
-
-  @Get('job/today')
-  @ResponseMessage('count Jobs Today')
-  countJobsToday() {
-    return this.dashboardService.countJobsToday();
-  }
-
-  @Get('resume/month')
-  @ResponseMessage('count Resumes Month')
-  countResumesMonth() {
-    return this.dashboardService.countResumesMonth();
+  @Get('skills')
+  @ResponseMessage('Top 5 Skills')
+  findTop5Skills() {
+    return this.dashboardService.findTop5Skills();
   }
 
   @Post()

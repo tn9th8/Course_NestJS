@@ -125,4 +125,16 @@ export class SkillsService {
       return { name: skill.name, value: skill._id };
     });
   }
+
+  async findTop5Skills() {
+    let skills = await this.skillModel.find({});
+    skills.map((item) => {
+      return { _id: item._id, name: item.name, number: 0 };
+    });
+
+    for (const skill of skills) {
+    }
+
+    return {};
+  }
 }
