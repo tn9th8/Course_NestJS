@@ -24,7 +24,7 @@ export class DashboardController {
 
   @Public()
   @Get('skills')
-  @ResponseMessage('Top 5 Skills')
+  @ResponseMessage('Top 5 kỹ năng tuyển dụng nhiều nhât')
   findTop5Skills() {
     return this.dashboardService.findTop5Skills();
   }
