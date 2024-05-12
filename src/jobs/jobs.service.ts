@@ -88,7 +88,6 @@ export class JobsService {
       .sort(sort as any)
       .exec();
 
-    // .find(filter)
     // .skip(offset)
     // .limit(defaultLimit)
     // .sort(sort as any)
@@ -160,7 +159,11 @@ export class JobsService {
       .select({ endDate: 1 })
       .exec();
 
-    return { number: (await result).length, today: today };
+    return {
+      message: 'Việc làm đang tuyển',
+      number: (await result).length,
+      today: today,
+    };
   }
 
   async countJobsToday() {
@@ -178,6 +181,10 @@ export class JobsService {
       .select({ startDate: 1 })
       .exec();
 
-    return { number: (await result).length, today: today };
+    return {
+      message: 'Việc làm mới hôm nay',
+      number: (await result).length,
+      today: today,
+    };
   }
 }

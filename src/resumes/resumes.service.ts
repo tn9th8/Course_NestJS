@@ -155,6 +155,10 @@ export class ResumesService {
       .select({ createdAt: 1 })
       .exec();
 
-    return { number: (await result).length, today: today };
+    return {
+      message: 'Ứng viên tháng này',
+      number: (await result).length,
+      today: today,
+    };
   }
 }
