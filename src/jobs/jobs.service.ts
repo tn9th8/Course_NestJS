@@ -27,20 +27,48 @@ export class JobsService {
     return newJob;
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
+  async findAll(
+    currentPage: number,
+    limit: number,
+    qs: string,
+    skills?: string[],
+    company?: string,
+  ) {
+    // giải mã query string, chuẩn bị các biến phân trang
     let { filter, sort } = aqp(qs);
+    let offset = (+currentPage - 1) * +limit;
+    let defaultLimit = +limit ? +limit : 10;
     delete filter.current;
     delete filter.pageSize;
     if (!sort) {
       sort = { updatedAt: -1 };
     }
 
-    let offset = (+currentPage - 1) * +limit;
-    let defaultLimit = +limit ? +limit : 10;
+    // tạo mongoose có signature để convert string to obj id
+    const mongoose = require('mongoose');
 
+    // chuẩn bị câu query tìm jobs mà matching với skills do client truyền
+    let jobsMatchingSkills = {};
+    if (skills) {
+      const skillsObjId = skills.map((item: string) => {
+        return new mongoose.Types.ObjectId(item);
+      });
+      jobsMatchingSkills = { skills: { $in: skillsObjId } };
+    }
+
+    // chuẩn bị câu query tìm jobs mà matching với company do client truyền
+    let jobsMatchingCompanies = {};
+    if (company) {
+      const companiesObjId = [];
+      companiesObjId.push(new mongoose.Types.ObjectId(company));
+      jobsMatchingCompanies = { 'company._id': { $in: companiesObjId } };
+    }
+
+    // model thực hiện đọc jobs data
     const result = await this.jobModel
       .aggregate([
         {
+          // join bảng company
           $lookup: {
             from: 'companies', // schema
             localField: 'company',
@@ -49,17 +77,12 @@ export class JobsService {
             as: 'company',
           },
         },
-        // {
-        //   $lookup: {
-        //     from: 'skills',
-        //     localField: 'skills',
-        //     foreignField: '_id',
-        //     pipeline: [{ $project: { _id: 1, name: 1 } }],
-        //     as: 'skills',
-        //   },
-        // },
-        { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
         { $match: { isDeleted: false } },
+        // select fields
         {
           $project: {
             _id: 1,
@@ -83,20 +106,17 @@ export class JobsService {
           },
         },
       ])
+      // paginate và sort
       .skip(offset)
       .limit(defaultLimit)
       .sort(sort as any)
       .exec();
 
-    // .skip(offset)
-    // .limit(defaultLimit)
-    // .sort(sort as any)
-    // .populate(population)
-    // .exec();
-
+    // paginate
     const totalItems = result.length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
+    // return
     return {
       meta: {
         current: currentPage, //trang hiện tại
