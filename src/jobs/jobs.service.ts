@@ -49,15 +49,15 @@ export class JobsService {
             as: 'company',
           },
         },
-        {
-          $lookup: {
-            from: 'skills',
-            localField: 'skills',
-            foreignField: '_id',
-            pipeline: [{ $project: { _id: 1, name: 1 } }],
-            as: 'skills',
-          },
-        },
+        // {
+        //   $lookup: {
+        //     from: 'skills',
+        //     localField: 'skills',
+        //     foreignField: '_id',
+        //     pipeline: [{ $project: { _id: 1, name: 1 } }],
+        //     as: 'skills',
+        //   },
+        // },
         { $match: filter }, // $match: { 'user.name': { $regex: /n$/i } }
         { $match: { isDeleted: false } },
         {
