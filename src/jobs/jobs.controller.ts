@@ -26,6 +26,7 @@ export class JobsController {
   }
 
   @Post()
+  @Get()
   @Public()
   @ResponseMessage('Fetch jobs with pagination')
   findAll(
