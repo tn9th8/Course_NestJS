@@ -108,7 +108,7 @@ export class JobsService {
       .select({ endDate: 1 })
       .exec();
 
-    return { JobsHiring: (await result).length, Today: today };
+    return { number: (await result).length, today: today };
   }
 
   async countJobsToday() {
@@ -126,6 +126,6 @@ export class JobsService {
       .select({ startDate: 1 })
       .exec();
 
-    return { JobsToday: (await result).length, Today: today };
+    return { number: (await result).length, today: today };
   }
 }

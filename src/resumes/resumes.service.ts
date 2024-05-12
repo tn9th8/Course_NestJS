@@ -155,9 +155,6 @@ export class ResumesService {
       .select({ createdAt: 1 })
       .exec();
 
-    return {
-      ResumesMonth: (await result).length,
-      Today: today,
-    };
+    return { number: (await result).length, today: today };
   }
 }

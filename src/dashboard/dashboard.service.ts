@@ -16,6 +16,17 @@ export class DashboardService {
     private resumesService: ResumesService,
   ) {}
 
+  async countJobs() {
+    const jobsHiring = await this.jobsService.countJobsHiring();
+    const jobsToday = await this.jobsService.countJobsToday();
+    const resumesMonth = await this.resumesService.countResumesMonth();
+    return {
+      jobsHiring,
+      jobsToday,
+      resumesMonth,
+    };
+  }
+
   async countJobsHiring() {
     return await this.jobsService.countJobsHiring();
   }
