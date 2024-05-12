@@ -17,7 +17,7 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('jobs')
 @Controller('jobs')
 export class JobsController {
-  constructor(private readonly jobsService: JobsService) {}
+  constructor(private readonly jobsService: JobsService) { }
 
   @Post()
   @ResponseMessage('Create a new job')
@@ -25,11 +25,23 @@ export class JobsController {
     return this.jobsService.create(createJobDto, userReq);
   }
 
-  @Post()
+
   @Get()
   @Public()
   @ResponseMessage('Fetch jobs with pagination')
   findAll(
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+    @Body('skills') skills?: string[],
+    @Body('company') company?: string,
+  ) {
+    return this.jobsService.findAll(+currentPage, +limit, qs, skills, company);
+  }
+  @Post('/new')
+  @Public()
+  @ResponseMessage('Fetch jobs with pagination')
+  findAllPost(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
     @Query() qs: string,
