@@ -14,7 +14,7 @@ export class JobsService {
   constructor(
     @InjectModel(Job.name) // connect shema of mongo
     private jobModel: SoftDeleteModel<JobDocument>, //private userModel: Model<Company>,
-  ) {}
+  ) { }
 
   async create(createJobDto: CreateJobDto, @User() userReq: IUser) {
     let newJob = await this.jobModel.create({
@@ -65,7 +65,57 @@ export class JobsService {
     }
 
     // model thực hiện đọc jobs data
-    const result = await this.jobModel
+    let result = await this.jobModel
+      .aggregate([
+        {
+          // join bảng company
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
+        { $match: { isDeleted: false } },
+        // select fields
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      // paginate và sort
+      //.skip(offset)
+      //.limit(defaultLimit)
+      .sort(sort as any)
+      .exec();
+
+    // paginate
+    const totalItems = result.length;
+    const totalPages = Math.ceil(totalItems / defaultLimit);
+    result = await this.jobModel
       .aggregate([
         {
           // join bảng company
@@ -111,11 +161,6 @@ export class JobsService {
       .limit(defaultLimit)
       .sort(sort as any)
       .exec();
-
-    // paginate
-    const totalItems = result.length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
-
     // return
     return {
       meta: {

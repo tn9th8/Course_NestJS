@@ -73,7 +73,7 @@ export class UsersService {
   async register(userDto: RegisterUserDto) {
     const { name, email, password, age, gender, address } = userDto;
 
-    // add logic check existing mail
+    // kiểm tra tồn tại email
     const isExist = await this.userModel.findOne({ email });
     if (isExist) {
       throw new BadRequestException(
@@ -81,7 +81,7 @@ export class UsersService {
       );
     }
 
-    // fetch USER_ROLE role
+    // tìm USER_ROLE role để lấy _id user role
     const userRole = await this.roleModel.findOne({ name: USER_ROLE });
 
     // hash password
