@@ -18,7 +18,7 @@ export class ResumesService {
 
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
-  ) {}
+  ) { }
 
   async create(createUserCvDto: CreateUserCvDto, user: IUser) {
     const { url, companyId, jobId } = createUserCvDto;
@@ -176,34 +176,56 @@ export class ResumesService {
     let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
-    const totalItems = (await this.resumeModel.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
+    let totalItems = (await this.resumeModel.find(filter)).length;
+    let totalPages = Math.ceil(totalItems / defaultLimit);
 
     const { name } = user.role;
     let _id = null;
     let result = null;
-    if (name.includes('HR')) { 
+    if (name.includes('HR')) {
       // for HR
       const hrUser = await this.userModel.findById(user._id);
 
       result = await this.resumeModel
-      .find(filter)
-      .find({ companyId: (await hrUser).company._id })
-      .skip(offset)
-      .limit(defaultLimit)
-      .sort(sort as any)
-      .populate(population)
-      .select(projection as any)
-      .exec();
-    }  else { 
+        .find(filter)
+        .find({ companyId: (await hrUser).company._id })
+        // .skip(offset)
+        // .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .select(projection as any)
+        .exec();
       result = await this.resumeModel
-      .find(filter)
-      .skip(offset)
-      .limit(defaultLimit)
-      .sort(sort as any)
-      .populate(population)
-      .select(projection as any)
-      .exec();
+        .find(filter)
+        .find({ companyId: (await hrUser).company._id })
+        .skip(offset)
+        .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .select(projection as any)
+        .exec();
+      totalItems = result.length;
+      totalPages = Math.ceil(totalItems / defaultLimit);
+    } else {
+      result = await this.resumeModel
+        .find(filter)
+        // .skip(offset)
+        // .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .select(projection as any)
+        .exec();
+      totalItems = result.length;
+      totalPages = Math.ceil(totalItems / defaultLimit);
+      result = await this.resumeModel
+        .find(filter)
+        .skip(offset)
+        .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .select(projection as any)
+        .exec();
+
     }
 
     return {
