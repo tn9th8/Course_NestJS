@@ -199,7 +199,7 @@ export class CompaniesService {
     let result = null;
     if (name.includes('HR')) {
       // for HR
-      const hrUser = this.userModel.findById(user._id);
+      const hrUser = await this.userModel.findById(user._id);
 
       result = await this.companyModel
         .find(filter)

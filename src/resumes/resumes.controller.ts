@@ -64,4 +64,15 @@ export class ResumesController {
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.resumesService.remove(id, user);
   }
+
+  @Post("/manager")
+  @ResponseMessage('Fetch all resumes with pagnigate')
+  findAllByManager(
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+    @User() user: IUser,
+  ) {
+    return this.resumesService.findAllByManager(+currentPage, +limit, qs, user);
+  }
 }
