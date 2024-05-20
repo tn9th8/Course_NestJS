@@ -2,6 +2,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { CompaniesService } from 'src/companies/companies.service';
+import { Company } from 'src/companies/schemas/company.schema';
 import { Job, JobDocument } from 'src/jobs/schemas/job.schemas';
 import {
   Subscriber,
@@ -20,8 +22,13 @@ export class MailService {
     @InjectModel(Job.name)
     private jobModel: SoftDeleteModel<JobDocument>,
 
+    @InjectModel(Company.name)
+    private companyModel: SoftDeleteModel<JobDocument>,
+
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
+
+    private companiesService: CompaniesService,
   ) {}
 
   async sendJobsToSubs() {
@@ -37,19 +44,19 @@ export class MailService {
       if (jobWithMatchingSkills?.length) {
         // định dạng dữ liệu job trước khi gửi
         const jobs = jobWithMatchingSkills.map((item: any) => {
+          const company : any = this.companiesService.findOne(item.company)
           return {
             name: item.name,
-            company: item.company.name,
-            salary:
-              `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' đ',
-            skills: item.skills,
+            company: company.name,
+            salary: `${item.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' đ',
+            // skills: item.skills,
           };
         });
         // từ sub => tìm user
         const user = await this.userModel.findById(subs.user);
         // gửi mail
         await this.mailerService.sendMail({
-          to: 'uyenbao4a5@gmail.com',
+          to: 'tn9th8@gmail.com',
           from: '"Support Team" <support@example.com>', // override default from
           subject: 'Welcome to Nice App! Confirm your Email',
           template: 'new-job', // HTML body content
