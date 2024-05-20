@@ -14,7 +14,7 @@ export class DashboardService {
     private jobsService: JobsService,
     private skillsService: SkillsService,
     private resumesService: ResumesService,
-  ) {}
+  ) { }
 
   async countJobs() {
     const jobsHiring = await this.jobsService.countJobsHiring();
@@ -30,6 +30,16 @@ export class DashboardService {
   async findTop5Skills() {
     const skills = await this.skillsService.findTop5Skills();
     return skills;
+  }
+
+  async countLevelJob() {
+    return [
+      await this.jobsService.countJobsLevel("INTERN"),
+      await this.jobsService.countJobsLevel("FRESHER"),
+      await this.jobsService.countJobsLevel("JUNIOR"),
+      await this.jobsService.countJobsLevel("MIDDLE"),
+      await this.jobsService.countJobsLevel("SENIOR"),
+    ]
   }
 
   create(createDashboardDto: CreateDashboardDto) {

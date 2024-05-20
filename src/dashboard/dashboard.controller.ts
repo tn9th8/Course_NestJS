@@ -14,7 +14,7 @@ import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('dashboard')
 export class DashboardController {
-  constructor(private readonly dashboardService: DashboardService) {}
+  constructor(private readonly dashboardService: DashboardService) { }
 
   @Get('jobs')
   @ResponseMessage('Count Jobs')
@@ -26,6 +26,11 @@ export class DashboardController {
   @ResponseMessage('Top 5 kỹ năng tuyển dụng nhiều nhất')
   findTop5Skills() {
     return this.dashboardService.findTop5Skills();
+  }
+  @Get('levels')
+  @ResponseMessage('Số lượng các vị trí tuyển dụng')
+  findLevels() {
+    return this.dashboardService.countLevelJob();
   }
 
   @Post()
