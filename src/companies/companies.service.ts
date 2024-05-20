@@ -18,7 +18,7 @@ export class CompaniesService {
 
     @InjectModel(UserModel.name)
     private userModel: SoftDeleteModel<UserDocument>,
-  ) { }
+  ) {}
 
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
@@ -33,8 +33,10 @@ export class CompaniesService {
 
   async findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
+    // console.log("🚀 ~ CompaniesService ~ findAll ~ qs:", qs)
     delete filter.current;
     delete filter.pageSize;
+    delete filter.name;
     // return { filter }; // check filter thấy dự page và limit nên phải xóa
     // { projection, population } để join bảng
     // regular expression:
