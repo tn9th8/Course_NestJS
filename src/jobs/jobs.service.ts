@@ -520,6 +520,7 @@ export class JobsService {
       },
       result, //kết quả query
     };
+  }
   async countJobsLevel(level: String) {
     let result = await this.jobModel.find({ level: { $eq: level } })
     return {
