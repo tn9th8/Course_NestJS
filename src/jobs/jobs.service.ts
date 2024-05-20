@@ -46,7 +46,6 @@ export class JobsService {
 
     // tạo mongoose có signature để convert string to obj id
     const mongoose = require('mongoose');
-
     // chuẩn bị câu query tìm jobs mà matching với skills do client truyền
     let jobsMatchingSkills = {};
     if (skills) {
@@ -55,7 +54,6 @@ export class JobsService {
       });
       jobsMatchingSkills = { skills: { $in: skillsObjId } };
     }
-
     // chuẩn bị câu query tìm jobs mà matching với company do client truyền
     let jobsMatchingCompanies = {};
     if (company) {
@@ -227,7 +225,7 @@ export class JobsService {
 
     return {
       message: 'Việc làm đang tuyển',
-      number: (await result).length,
+      number: (result).length,
       today: today,
     };
   }
@@ -249,7 +247,7 @@ export class JobsService {
 
     return {
       message: 'Việc làm mới hôm nay',
-      number: (await result).length,
+      number: (result).length,
       today: today,
     };
   }
@@ -260,5 +258,12 @@ export class JobsService {
     });
     console.log(jobMatchingSkills.length);
     return jobMatchingSkills.length;
+  }
+  async countJobsLevel(level: String) {
+    let result = await this.jobModel.find({ level: { $eq: level } })
+    return {
+      position: `Vị trí ${level}`,
+      value: (result).length
+    }
   }
 }
