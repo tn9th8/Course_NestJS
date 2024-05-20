@@ -63,7 +63,7 @@ export class CompaniesController {
 
   @Post('manager')
   @ResponseMessage('Fetch list companies with pagination by manager')
-  findAllPiv(
+  findAllByManager(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
     @Query() qs: string,
