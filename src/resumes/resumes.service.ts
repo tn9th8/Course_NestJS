@@ -7,12 +7,17 @@ import { Resume, ResumeDocument } from './schemas/resume.schemas';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import mongoose from 'mongoose';
 import aqp from 'api-query-params';
+import { UsersService } from 'src/users/users.service';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class ResumesService {
   constructor(
     @InjectModel(Resume.name) // connect shema of mongo
     private resumeModel: SoftDeleteModel<ResumeDocument>, //private userModel: Model<Company>,
+
+    @InjectModel(User.name)
+    private userModel: SoftDeleteModel<UserDocument>,
   ) {}
 
   async create(createUserCvDto: CreateUserCvDto, user: IUser) {
@@ -159,6 +164,56 @@ export class ResumesService {
       message: 'Ứng viên tháng này',
       number: (await result).length,
       today: today,
+    };
+
+  }
+
+  async findAllByManager(currentPage: number, limit: number, qs: string, user: IUser) {
+    const { filter, sort, population, projection } = aqp(qs);
+    delete filter.current;
+    delete filter.pageSize;
+
+    let offset = (+currentPage - 1) * +limit;
+    let defaultLimit = +limit ? +limit : 10;
+
+    const totalItems = (await this.resumeModel.find(filter)).length;
+    const totalPages = Math.ceil(totalItems / defaultLimit);
+
+    const { name } = user.role;
+    let _id = null;
+    let result = null;
+    if (name.includes('HR')) { 
+      // for HR
+      const hrUser = await this.userModel.findById(user._id);
+
+      result = await this.resumeModel
+      .find(filter)
+      .find({ companyId: (await hrUser).company._id })
+      .skip(offset)
+      .limit(defaultLimit)
+      .sort(sort as any)
+      .populate(population)
+      .select(projection as any)
+      .exec();
+    }  else { 
+      result = await this.resumeModel
+      .find(filter)
+      .skip(offset)
+      .limit(defaultLimit)
+      .sort(sort as any)
+      .populate(population)
+      .select(projection as any)
+      .exec();
+    }
+
+    return {
+      meta: {
+        current: currentPage,
+        pageSize: limit,
+        pages: totalPages,
+        total: totalItems,
+      },
+      result,
     };
   }
 }

@@ -39,7 +39,7 @@ export class JobsController {
   }
   @Post('/new')
   @Public()
-  @ResponseMessage('Fetch jobs with pagination 123')
+  @ResponseMessage('Fetch jobs with pagination')
   findAllPost(
     @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
