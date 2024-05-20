@@ -10,6 +10,8 @@ import { Subscriber } from 'rxjs';
 import { SubscriberSchema } from 'src/subscribers/schemas/subscriber.schema';
 import { Job, JobSchema } from 'src/jobs/schemas/job.schemas';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { Company, CompanySchema } from 'src/companies/schemas/company.schema';
+import { CompaniesModule } from 'src/companies/companies.module';
 
 @Module({
   controllers: [MailController],
@@ -40,9 +42,11 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
     }),
     MongooseModule.forFeature([
       { name: Subscriber.name, schema: SubscriberSchema },
+      { name: Company.name, schema: CompanySchema },
       { name: Job.name, schema: JobSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    CompaniesModule,
   ],
   exports: [MailService],
 })

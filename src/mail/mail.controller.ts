@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
 import { Public, ResponseMessage } from 'src/decorator/customize';
 import { MailService } from './mail.service';
@@ -11,7 +11,8 @@ export class MailController {
   @Get()
   @Public()
   @ResponseMessage('Send a new-job email')
-  @Cron('0 0 7 * * 0') // Every Sun, 7h:0m:0s // @Cron('10 * * * * *')
+  // @Cron('0 0 7 * * 0') // Every Sun, 7h:0m:0s // 
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleSendMail() {
     this.mailService.sendJobsToSubs();
   }
