@@ -8,12 +8,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
+import { UserDocument, User as UserModel } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class JobsService {
   constructor(
     @InjectModel(Job.name) // connect shema of mongo
     private jobModel: SoftDeleteModel<JobDocument>, //private userModel: Model<Company>,
+
+    @InjectModel(UserModel.name)
+    private userModel: SoftDeleteModel<UserDocument>,
   ) { }
 
   async create(createJobDto: CreateJobDto, @User() userReq: IUser) {
@@ -260,5 +264,263 @@ export class JobsService {
     });
     console.log(jobMatchingSkills.length);
     return jobMatchingSkills.length;
+  }
+
+  async findAllByManager(
+    currentPage: number,
+    limit: number,
+    qs: string,
+    user: IUser,
+    skills?: string[],
+    company?: string,
+  ) {
+    // giải mã query string, chuẩn bị các biến phân trang
+    let { filter, sort } = aqp(qs);
+    let offset = (+currentPage - 1) * +limit;
+    let defaultLimit = +limit ? +limit : 10;
+    delete filter.current;
+    delete filter.pageSize;
+    if (!sort) {
+      sort = { updatedAt: -1 };
+    }
+
+    // tạo mongoose có signature để convert string to obj id
+    const mongoose = require('mongoose');
+
+    // chuẩn bị câu query tìm jobs mà matching với skills do client truyền
+    let jobsMatchingSkills = {};
+    if (skills) {
+      const skillsObjId = skills.map((item: string) => {
+        return new mongoose.Types.ObjectId(item);
+      });
+      jobsMatchingSkills = { skills: { $in: skillsObjId } };
+    }
+
+    // chuẩn bị câu query tìm jobs mà matching với company do client truyền
+    let jobsMatchingCompanies = {};
+    if (company) {
+      const companiesObjId = [];
+      companiesObjId.push(new mongoose.Types.ObjectId(company));
+      jobsMatchingCompanies = { 'company._id': { $in: companiesObjId } };
+    }
+
+    // model thực hiện đọc jobs data
+    let result = null;
+    let totalItems = null;
+    let totalPages = null;
+    const { name } = user.role;
+    if (name.includes('HR')) {
+      const hrUser = await this.userModel.findById(user._id);
+
+      const companiesObjId = [];
+      companiesObjId.push(new mongoose.Types.ObjectId(hrUser.company._id));
+      jobsMatchingCompanies = { 'company._id': { $in: companiesObjId } };
+
+      result = await this.jobModel
+      .aggregate([
+        {
+          // join bảng company
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
+        { $match: { isDeleted: false } },
+        // select fields
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      // paginate và sort
+      //.skip(offset)
+      //.limit(defaultLimit)
+      .sort(sort as any)
+      .exec();
+
+    // paginate
+    totalItems = result.length;
+    totalPages = Math.ceil(totalItems / defaultLimit);
+    result = await this.jobModel
+      .aggregate([
+        {
+          // join bảng company
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
+        { $match: { isDeleted: false } },
+        // select fields
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      // paginate và sort
+      .skip(offset)
+      .limit(defaultLimit)
+      .sort(sort as any)
+      .exec();
+    }
+    else {
+      result = await this.jobModel
+      .aggregate([
+        {
+          // join bảng company
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
+        { $match: { isDeleted: false } },
+        // select fields
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      // paginate và sort
+      //.skip(offset)
+      //.limit(defaultLimit)
+      .sort(sort as any)
+      .exec();
+
+    // paginate
+    totalItems = result.length;
+    totalPages = Math.ceil(totalItems / defaultLimit);
+    result = await this.jobModel
+      .aggregate([
+        {
+          // join bảng company
+          $lookup: {
+            from: 'companies', // schema
+            localField: 'company',
+            foreignField: '_id',
+            pipeline: [{ $project: { _id: 1, name: 1, logo: 1 } }],
+            as: 'company',
+          },
+        },
+        // where query string, skills, company
+        { $match: filter },
+        { $match: jobsMatchingSkills },
+        { $match: jobsMatchingCompanies },
+        { $match: { isDeleted: false } },
+        // select fields
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            company: { $arrayElemAt: ['$company', 0] }, // convert array to one
+            skills: 1,
+            location: 1,
+            salary: 1,
+            quantity: 1,
+            level: 1,
+            description: 1,
+            endDate: 1,
+            startDate: 1,
+            createdAt: 1,
+            createdBy: 1,
+            updatedAt: 1,
+            updatedBy: 1,
+            isDeleted: 1,
+            deletedAt: 1,
+            deletedBy: 1,
+          },
+        },
+      ])
+      // paginate và sort
+      .skip(offset)
+      .limit(defaultLimit)
+      .sort(sort as any)
+      .exec();
+    }
+
+    // return
+    return {
+      meta: {
+        current: currentPage, //trang hiện tại
+        pageSize: limit, //số lượng bản ghi đã lấy
+        pages: totalPages, //tổng số trang với điều kiện query
+        total: totalItems, // tổng số phần tử (số bản ghi)
+      },
+      result, //kết quả query
+    };
   }
 }

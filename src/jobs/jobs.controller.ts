@@ -72,4 +72,19 @@ export class JobsController {
   remove(@Param('id') id: string, @User() userReq: IUser) {
     return this.jobsService.remove(id, userReq);
   }
+
+  @Post('/manager')
+  @ResponseMessage('Fetch jobs with pagination by manager')
+  findAllByManager(
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+    @User() user: IUser,
+    @Body('skills') skills?: string[],
+    @Body('company') company?: string,
+  ) {
+    return this.jobsService.findAllByManager(+currentPage, +limit, qs, user, skills, company);
+  }
+  
+  
 }
