@@ -18,7 +18,7 @@ export class CompaniesService {
 
     @InjectModel(UserModel.name)
     private userModel: SoftDeleteModel<UserDocument>,
-  ) {}
+  ) { }
 
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
     // ... mean is that copying all data of createCompanyDto to insert 1 document at database
@@ -177,8 +177,8 @@ export class CompaniesService {
 
     // count all documents theo điều kiện filter
     // chia và làm tròn ra tổng số trang
-    const totalItems = (await this.companyModel.find(filter)).length;
-    const totalPages = Math.ceil(totalItems / defaultLimit);
+    let totalItems = (await this.companyModel.find(filter)).length;
+    let totalPages = Math.ceil(totalItems / defaultLimit);
 
     // sort(sort) có bug
     // vì 2 package mongoose và api-query-param bị bênh / lỗi
@@ -204,12 +204,31 @@ export class CompaniesService {
       result = await this.companyModel
         .find(filter)
         .find({ _id: (await hrUser).company._id })
+        // .skip(offset)
+        // .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .exec();
+      totalItems = result.length;
+      totalPages = Math.ceil(totalItems / defaultLimit);
+      result = await this.companyModel
+        .find(filter)
+        .find({ _id: (await hrUser).company._id })
         .skip(offset)
         .limit(defaultLimit)
         .sort(sort as any)
         .populate(population)
         .exec();
     } else {
+      result = await this.companyModel
+        .find(filter)
+        // .skip(offset)
+        // .limit(defaultLimit)
+        .sort(sort as any)
+        .populate(population)
+        .exec();
+      totalItems = result.length;
+      totalPages = Math.ceil(totalItems / defaultLimit);
       result = await this.companyModel
         .find(filter)
         .skip(offset)
